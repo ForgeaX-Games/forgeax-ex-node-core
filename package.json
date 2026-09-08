@@ -1,0 +1,37 @@
+{
+  "name": "@forgeax/node-runtime-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Headless node runtime, editing API, React component library, and CLI shared by ForgeaX node-programming plugins",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@git.example.com/dev/forgeax-wb-node-core.git"
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "clean": "pnpm -r clean && rm -rf node_modules",
+    "hygiene": "node scripts/hygiene-check.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "typescript": "^5.6.0",
+    "@types/node": "^20.0.0",
+    "vitest": "^3.0.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "prettier": "^3.0.0"
+  }
+}

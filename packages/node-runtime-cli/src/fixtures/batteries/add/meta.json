@@ -1,0 +1,11 @@
+{
+  "id": "fixture.add",
+  "name": "add",
+  "inputs": [
+    { "name": "a", "type": "number", "access": "item" },
+    { "name": "b", "type": "number", "access": "item" }
+  ],
+  "outputs": [{ "name": "sum", "type": "number", "access": "item" }],
+  "params": [],
+  "lacing": "longest"
+}

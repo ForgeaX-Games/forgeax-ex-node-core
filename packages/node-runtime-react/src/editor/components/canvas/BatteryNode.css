@@ -1,0 +1,542 @@
+/* 💡 电池节点样式：定义画布中单个卡片节点的圆角、阴影、选中高亮及输入输出端口的排版 */
+.battery-node {
+  --node-color: var(--color-accent);
+  --node-rgb: var(--color-accent-rgb);
+  min-width: 180px;
+  background-color: rgba(var(--node-rgb), 0.15);
+  border: 1px solid var(--node-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.72),
+              0 0 0 1px rgba(var(--node-rgb), 0.22),
+              0 0 16px rgba(var(--node-rgb), 0.26),
+              0 0 30px rgba(var(--node-rgb), 0.1);
+  outline: 2px solid transparent;
+  outline-offset: 0;
+  opacity: 1;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              outline-color var(--transition-fast),
+              box-shadow var(--transition-fast),
+              opacity var(--transition-fast);
+  /* position:relative + z-index 基线：标题/端口名溢出节点边缘时仍能浮在画布之上；
+     hover/selected 时 z-index 提升到 10，确保溢出文字盖在相邻节点上。 */
+  position: relative;
+  z-index: 1;
+}
+
+/* ── 所有电池统一亮度等级；色相由 --node-color / --node-rgb 决定 ───────── */
+.battery-node:hover {
+  background-color: rgba(var(--node-rgb), 0.18);
+  border-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.82),
+              0 0 0 1px rgba(var(--node-rgb), 0.3),
+              0 0 18px rgba(var(--node-rgb), 0.34),
+              0 0 34px rgba(var(--node-rgb), 0.14);
+  /* hover 时浮起：让溢出节点边缘的标题/端口名显示在相邻节点之上 */
+  z-index: 10;
+}
+
+.battery-node.selected {
+  background-color: rgba(var(--node-rgb), 0.24);
+  border-color: var(--node-color);
+  outline-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 2px rgba(var(--node-rgb), 0.98),
+              0 0 0 2px rgba(var(--node-rgb), 0.42),
+              0 0 20px rgba(var(--node-rgb), 0.58),
+              0 0 42px rgba(var(--node-rgb), 0.24);
+  /* selected 时浮起：让溢出节点边缘的标题/端口名显示在相邻节点之上 */
+  z-index: 10;
+}
+
+.battery-node[data-battery-type="json"] {
+  --node-color: #d97706;
+  --node-rgb: 217, 119, 6;
+}
+
+.battery-node[data-battery-type="special"] {
+  --node-color: #2563eb;
+  --node-rgb: 37, 99, 235;
+}
+
+.battery-node[data-battery-type="ai"] {
+  --node-color: #dc2626;
+  --node-rgb: 220, 38, 38;
+}
+
+.battery-node[data-battery-type="ai"] .node-header {
+  border-bottom: 1px solid rgba(var(--node-rgb), 0.22);
+}
+
+.node-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: rgba(var(--node-rgb), 0.12);
+  border-radius: calc(var(--radius-md) - 1px) calc(var(--radius-md) - 1px) 0 0;
+  border-bottom: 1px solid rgba(var(--node-rgb), 0.18);
+  cursor: grab;
+  transition: background-color var(--transition-fast);
+  min-width: 0;
+}
+
+.battery-node:hover .node-header {
+  background-color: rgba(var(--node-rgb), 0.16);
+}
+
+.battery-node.selected .node-header {
+  background-color: rgba(var(--node-rgb), 0.22);
+  border-bottom-color: rgba(var(--node-rgb), 0.5);
+}
+
+.battery-node:active .node-header {
+  cursor: grabbing;
+}
+
+.node-title {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height: 1.22; /* 给英文 g/j/p/y 下探部留空间，避免紧凑标题栏裁切 */
+  white-space: nowrap;
+  /* 不再裁切：文字超出节点边缘时浮在节点上方，依靠 .battery-node z-index 保证不被相邻节点/连线遮挡 */
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* 端口排列基础结构
+   grid 两列各占 1fr，确保左右两列宽度固定为节点宽度的各一半，
+   output-port 行必然撑满右列，Handle right:-5px 始终落在节点右边缘。
+   flex+space-between 方案下 output-port 行宽度由文字内容决定，
+   当端口名称短时右边缘与节点右边缘存在偏差，导致 Handle 悬浮在节点外部。 */
+.node-ports {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: var(--spacing-sm) 0;
+  min-height: 40px;
+}
+
+.input-ports,
+.output-ports {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  min-width: 0; /* 允许在 grid 列内收缩，配合 text-overflow:ellipsis */
+}
+
+.port {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  line-height: 1.2; /* 紧凑但保留下探部，避免英文端口名底部被裁 */
+  min-width: 0; /* flex 子项须设 min-width:0 才能触发子元素的 text-overflow */
+}
+
+/* position: relative 使内部 Handle 的 top:50% 相对于端口行自身高度居中 */
+.input-port {
+  position: relative;
+  padding: 3px var(--spacing-sm) 3px var(--spacing-md);
+  justify-content: flex-start;
+  text-align: left;
+}
+
+/* justify-content:flex-end 使端口内容（文字+handle）靠右对齐，
+   配合 grid 行铺满右列，Handle right:-5px 恰好落在节点右边缘 */
+.output-port {
+  position: relative;
+  padding: 3px var(--spacing-md) 3px var(--spacing-sm);
+  justify-content: flex-end;
+  text-align: right;
+}
+
+/* 让输入 Handle 严格贴在端口行的左侧边缘，水平居中 */
+.input-port .react-flow__handle {
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  opacity: 1;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 让输出 Handle 严格贴在端口行的右侧边缘，水平居中 */
+.output-port .react-flow__handle {
+  right: -5px;
+  left: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  opacity: 1;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Handle 悬停时发光 */
+.react-flow__handle:hover {
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* DataTree 端口形态标记叠加在端口圆点上：
+ *   - access:item — 不渲染（默认圆点 Handle 自身就是 item 视觉）
+ *   - access:list — 实心方块（一支 branch 携带多 items）
+ *   - access:tree — 树形分叉双横线（整棵 DataTree，调用方负责消费）
+ * 颜色仍由基础类型决定（通过 currentColor 继承），形状只表达 access 语义。
+ */
+.port-access-marker {
+  position: absolute;
+  z-index: 21;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  color: #0b1020;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.55);
+}
+
+.port-access-marker--input {
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.port-access-marker--output {
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* list：单条横向短粗线，象征 branch 内 [a,b,c] 顺序排列 */
+.port-access-marker--list::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  top: 4px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 1px;
+}
+
+/* tree：双线（fork 隐喻整棵树的多 branch） */
+.port-access-marker--tree::before,
+.port-access-marker--tree::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  height: 1px;
+  background: currentColor;
+  border-radius: 1px;
+}
+.port-access-marker--tree::before { top: 3px; }
+.port-access-marker--tree::after { top: 6px; }
+
+/* principal 输入端口：在 handle 圆点正左侧紧贴端口画一道竖杠。
+ * ReactFlow 的 Position.Left 强制连线在 handle 切点处水平，所以竖杠紧贴 handle
+ * 放置才能保证视觉上和入线方向严格垂直；离开 handle 后曲线开始拐弯就不再正交。
+ */
+.input-port--principal::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 12px;
+  background: var(--color-text-primary, #fff);
+  border-radius: 1px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* 动态输出端口占位样式（执行前显示，提示用户尚未生成真实端口） */
+.output-port--placeholder .port-label {
+  color: var(--color-text-muted, rgba(255, 255, 255, 0.3));
+  font-style: italic;
+}
+.output-port--placeholder .react-flow__handle {
+  border-style: dashed !important;
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.port-label {
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  /* 不再裁切：超长端口名向外溢出，浮在节点之上；输入端口溢出方向向右，输出端口反向（由 .output-port:has 兜底） */
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+  transition: color var(--transition-fast);
+}
+
+.input-port .port-label {
+  text-align: left;
+}
+
+.output-port .port-label {
+  text-align: right;
+}
+
+/* ===== 预览关闭状态 ===== */
+.battery-node.preview-disabled {
+  opacity: 0.52;
+}
+
+.battery-node.preview-disabled::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(var(--node-rgb), 0.86);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.battery-node.preview-disabled .node-header {
+  background-color: rgba(20, 20, 32, 0.95);
+}
+
+/* 标题栏右侧"预览关闭"文字指示器 */
+.preview-off-indicator {
+  margin-left: auto;
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s, opacity 0.15s;
+}
+
+.preview-off-indicator:hover {
+  color: var(--color-accent);
+  opacity: 1;
+}
+
+/* 部分子图层关闭时的样式（橙黄色警示） */
+.preview-off-indicator.partial {
+  color: #f0a020;
+  opacity: 0.85;
+}
+
+.preview-off-indicator.partial:hover {
+  color: #ffb840;
+  opacity: 1;
+}
+
+/* ===== 右键上下文菜单 ===== */
+.node-context-menu {
+  position: fixed;
+  z-index: 10000;
+  background: #1c1c30;
+  border: 1px solid #3a3a5a;
+  border-radius: var(--radius-sm);
+  padding: 4px 0;
+  min-width: 148px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(var(--color-accent-rgb), 0.12);
+  animation: menuIn 0.1s ease;
+  user-select: none;
+}
+
+@keyframes menuIn {
+  from { opacity: 0; transform: scale(0.95) translateY(-2px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.node-context-menu-item {
+  padding: 7px 14px;
+  font-size: 0.78rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.node-context-menu-item:hover {
+  background-color: rgba(var(--color-accent-rgb), 0.18);
+  color: #fff;
+}
+
+.node-context-menu-item--danger {
+  color: #fecaca;
+}
+
+.node-context-menu-item--danger:hover {
+  background-color: rgba(239, 68, 68, 0.18);
+  color: #fff;
+}
+
+/* ===== 端口 options 小图标选择器（普通/special 电池，中性配色） ===== */
+.bn-port-options-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid rgba(160, 160, 200, 0.3);
+  background: rgba(160, 160, 200, 0.08);
+  color: rgba(190, 188, 220, 0.7);
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s, color 0.15s;
+  outline: none;
+}
+
+.bn-port-options-btn:hover {
+  border-color: rgba(160, 160, 200, 0.65);
+  background: rgba(160, 160, 200, 0.18);
+  box-shadow: 0 0 5px rgba(160, 160, 200, 0.25);
+  color: #c8c6e8;
+}
+
+.bn-port-options-btn:active {
+  background: rgba(160, 160, 200, 0.28);
+  transition-duration: 0.08s;
+}
+
+.bn-port-options-btn--open {
+  border-color: rgba(160, 160, 200, 0.75);
+  background: rgba(160, 160, 200, 0.2);
+  box-shadow: 0 0 6px rgba(160, 160, 200, 0.3);
+  color: #dddcf8;
+}
+
+.bn-port-options-btn svg {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bn-port-options-btn--open svg {
+  transform: rotate(180deg);
+}
+
+/* ===== Tooltip ===== */
+.node-tooltip {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  background: linear-gradient(145deg, #1f1f38 0%, #191926 100%);
+  border: 1px solid rgba(var(--color-accent-rgb), 0.28);
+  border-radius: 6px;
+  padding: 8px 11px;
+  min-width: 130px;
+  max-width: 240px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(var(--color-accent-rgb), 0.08);
+  animation: tooltipIn 0.15s ease;
+}
+
+@keyframes tooltipIn {
+  from { opacity: 0; transform: translateY(5px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* 标题行：名称左对齐，版本/类型 badge 右对齐 */
+.node-tooltip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.node-tooltip-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: 0.01em;
+}
+
+/* 版本/类型 badge：同色倒角框 */
+.node-tooltip-type {
+  font-size: 0.62rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  padding: 1px 5px;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* 目录标签（电池弹窗专用），显示在标题下方；纯文字无边框 */
+.node-tooltip-tag {
+  font-size: 0.63rem;
+  font-weight: 500;
+  color: rgba(190, 188, 220, 0.7);  /* 普通目录：静默白 */
+  margin-bottom: 4px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.node-tooltip-desc {
+  font-size: 0.69rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+.node-tooltip-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+/* 所有值行：label 统一使用代码字体 */
+.node-tooltip-value-label {
+  font-size: 0.65rem;
+  font-family: 'Courier New', monospace;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.node-tooltip-value-text {
+  font-size: 0.7rem;
+  font-family: 'Courier New', monospace;
+  word-break: break-all;
+}
+
+/* array/dict 紧凑预览行，另起一行显示在摘要下方 */
+.node-tooltip-value-extra {
+  width: 100%;
+  font-size: 0.68rem;
+  font-family: 'Courier New', monospace;
+  word-break: break-all;
+  opacity: 0.75;
+  margin-top: 1px;
+}
+
+.node-tooltip-value-tree-info {
+  width: 100%;
+  font-size: 0.64rem;
+  font-family: 'Courier New', monospace;
+  color: rgba(180, 200, 255, 0.78);
+  margin-top: 1px;
+}
+
+/* 有实际值（已连接/已计算）：label 和 text 均青绿高亮，label 略暗以区分层次 */
+.node-tooltip-value:not(.muted) .node-tooltip-value-label {
+  color: rgba(111, 207, 201, 0.65);
+}
+
+.node-tooltip-value:not(.muted) .node-tooltip-value-text {
+  color: #6fcfc9;
+}
+
+/* 默认值行：label + value 琥珀色高亮 */
+.node-tooltip-value.muted .node-tooltip-value-label {
+  color: #b87c3a;
+}
+
+.node-tooltip-value.muted .node-tooltip-value-text {
+  color: #e8a84e;
+  font-style: normal;
+}

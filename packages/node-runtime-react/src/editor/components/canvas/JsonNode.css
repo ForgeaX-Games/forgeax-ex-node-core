@@ -1,0 +1,123 @@
+/* 💡 JSON 电池节点样式：琥珀色主题，固定尺寸，内容区滚动不撑开节点 */
+
+.json-node {
+  --node-color: #d97706;
+  --node-rgb: 217, 119, 6;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(var(--node-rgb), 0.15);
+  border: 1px solid var(--node-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.72),
+              0 0 0 1px rgba(var(--node-rgb), 0.22),
+              0 0 16px rgba(var(--node-rgb), 0.26),
+              0 0 30px rgba(var(--node-rgb), 0.1);
+  outline: 2px solid transparent;
+  outline-offset: 0;
+  overflow: hidden;
+  opacity: 0.88;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast), outline-color var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
+}
+
+.json-node:hover {
+  background-color: rgba(var(--node-rgb), 0.18);
+  border-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.82),
+              0 0 0 1px rgba(var(--node-rgb), 0.3),
+              0 0 18px rgba(var(--node-rgb), 0.34),
+              0 0 34px rgba(var(--node-rgb), 0.14);
+}
+
+.json-node.selected {
+  background-color: rgba(var(--node-rgb), 0.24);
+  border-color: var(--node-color);
+  outline-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 2px rgba(var(--node-rgb), 0.98),
+              0 0 0 2px rgba(var(--node-rgb), 0.42),
+              0 0 20px rgba(var(--node-rgb), 0.58),
+              0 0 42px rgba(var(--node-rgb), 0.24);
+}
+
+/* 标题栏：复用 .node-header 基础样式，叠加 JSON 风格 */
+.json-node-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: rgba(var(--node-rgb), 0.12);
+  border-bottom: 1px solid rgba(var(--node-rgb), 0.22);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  cursor: grab;
+  flex-shrink: 0;
+  gap: var(--spacing-sm);
+}
+
+.json-node-header .node-title {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* JSON 类型徽章 */
+.json-badge {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(var(--node-rgb), 0.92);
+  background: rgba(var(--node-rgb), 0.14);
+  border: 1px solid rgba(var(--node-rgb), 0.34);
+  border-radius: 3px;
+  padding: 1px 4px;
+  flex-shrink: 0;
+}
+
+/* JSON 预览区：填满剩余空间，内容超出时滚动，不撑开节点 */
+.json-preview {
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+  padding: 6px 8px;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.json-preview-content {
+  margin: 0;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 10px;
+  line-height: 1.5;
+  color: rgba(217, 119, 6, 0.85);
+  white-space: pre;
+  tab-size: 2;
+}
+
+/* 键名着色（通过文本颜色继承实现基础高亮） */
+.json-preview-content {
+  color: #e0c585;
+}
+
+.json-preview-empty {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* NodeResizer 缩放手柄：琥珀色风格 */
+.json-resize-line {
+  border-color: var(--node-color) !important;
+  border-style: dashed !important;
+}
+
+.json-resize-handle {
+  width: 7px !important;
+  height: 7px !important;
+  background: var(--node-color) !important;
+  border-color: rgba(var(--node-rgb), 0.5) !important;
+}

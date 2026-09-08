@@ -1,0 +1,76 @@
+.relay-node {
+  --relay-color: var(--color-accent);
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-bg-secondary) 76%, var(--relay-color) 24%);
+  border: 1px solid color-mix(in srgb, var(--relay-color) 70%, transparent);
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--relay-color) 14%, transparent),
+    0 4px 14px rgba(0, 0, 0, 0.35);
+  color: var(--color-text-primary);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.relay-node--selected {
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--relay-color) 45%, transparent),
+    0 0 14px color-mix(in srgb, var(--relay-color) 40%, transparent),
+    0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.relay-node__core {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--relay-color);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--relay-color) 65%, transparent);
+}
+
+.relay-node__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.relay-node__label--input {
+  text-align: left;
+}
+
+.relay-node__label--output {
+  text-align: right;
+}
+
+.relay-node__handle {
+  width: 8px;
+  height: 8px;
+  opacity: 0;
+}
+
+.relay-node:hover .relay-node__handle,
+.relay-node--selected .relay-node__handle {
+  opacity: 1;
+}
+
+.relay-node__handle--input {
+  left: -5px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.relay-node__handle--output {
+  right: -5px;
+  top: 50%;
+  transform: translate(50%, -50%);
+}

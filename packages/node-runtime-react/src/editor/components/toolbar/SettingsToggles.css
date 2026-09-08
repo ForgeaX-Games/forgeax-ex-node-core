@@ -1,0 +1,29 @@
+/* Self-contained styling for the standalone preference toggles, mirroring the
+   in-gear `.settings-checkbox-row` look so they read identically wherever a host
+   app mounts them (e.g. a side pane outside the toolbar's stylesheet). */
+.kernel-toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 4px;
+  font-size: 12px;
+  color: var(--color-text, #e5e7eb);
+  cursor: pointer;
+  user-select: none;
+}
+
+.kernel-toggle-row input[type='checkbox'] {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--color-accent, #6366f1);
+  cursor: pointer;
+}
+
+.kernel-toggle-row svg {
+  flex: 0 0 auto;
+  opacity: 0.8;
+}
+
+.kernel-toggle-row span {
+  flex: 1 1 auto;
+}

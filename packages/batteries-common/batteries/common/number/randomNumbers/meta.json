@@ -1,0 +1,74 @@
+{
+  "id": "random_numbers",
+  "label": "随机数列",
+  "name-en": "RandNums",
+  "description": "生成一组一维形状的随机数序列，支持指定范围、数量和随机种子，可在浮点数和整数模式之间切换",
+  "description-en": "Generate a rank-1 sequence of random numbers with configurable range, count, and seed; supports toggling between float and integer mode.",
+  "icon": "一个骰子旁边排列着一列随机数字，表示随机数生成器，扁平插画风格，适合做小尺寸电池图标，主体清晰、背景简洁、主色 2 种。",
+  "version": "1.0.0",
+  "tags": [
+    "basic",
+    "utility"
+  ],
+  "tag_labels": [
+    "基础",
+    "工具"
+  ],
+  "inputs": [
+    {
+      "name": "count",
+      "type": "number",
+      "access": "item",
+      "label": "数量",
+      "default": 1,
+      "description": "生成的随机数数量（自动取整且 >=0）",
+      "description-en": "Number of random values to generate (auto-floored, >=0)."
+    },
+    {
+      "name": "min",
+      "type": "number",
+      "access": "item",
+      "label": "最小值",
+      "default": 0,
+      "description": "随机数最小值",
+      "description-en": "Minimum value of the random numbers."
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "access": "item",
+      "label": "最大值",
+      "default": 1,
+      "description": "随机数最大值",
+      "description-en": "Maximum value of the random numbers."
+    },
+    {
+      "name": "seed",
+      "type": "number",
+      "access": "item",
+      "label": "随机种子",
+      "default": 0,
+      "description": "随机种子（整数）；0 表示使用当前时间戳（每次结果不同），非零值产生固定结果",
+      "description-en": "Random seed (integer); 0 uses the current timestamp for a different result each run; any non-zero value produces a fixed output."
+    },
+    {
+      "name": "integerOnly",
+      "type": "boolean",
+      "access": "item",
+      "label": "仅输出整数",
+      "default": true,
+      "description": "开启后对每个随机数执行 Math.floor，仅输出整数；关闭后输出浮点数",
+      "description-en": "When enabled, applies Math.floor to each value so only integers are output; disable to get floating-point numbers."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "numbers",
+      "type": "number",
+      "access": "list",
+      "label": "随机数列",
+      "description": "生成的一维随机数序列",
+      "description-en": "Generated rank-1 sequence of random numbers."
+    }
+  ]
+}

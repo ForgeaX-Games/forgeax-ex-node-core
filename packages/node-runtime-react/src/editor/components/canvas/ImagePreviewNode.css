@@ -1,0 +1,160 @@
+/* ImagePreview 节点样式 — 与 ImageReaderNode 视觉一致，但侧重「观察」
+ * 布局：左侧名称格子（58px，含输入端口）| 中央预览区（flex:1） | 右侧输出端口
+ */
+
+.ip-node {
+  --node-color: #2dd4bf;
+  --node-rgb: 45, 212, 191;
+  display: flex;
+  align-items: stretch;
+  width: 180px;
+  min-height: 58px;
+  background: rgba(var(--node-rgb), 0.15);
+  border: 1px solid var(--node-color);
+  border-radius: 4px;
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.72),
+              0 0 0 1px rgba(var(--node-rgb), 0.22),
+              0 0 16px rgba(var(--node-rgb), 0.26),
+              0 0 30px rgba(var(--node-rgb), 0.1);
+  outline: 2px solid transparent;
+  outline-offset: 0;
+  overflow: visible;
+  opacity: 0.88;
+  transition: background 0.12s, border-color 0.12s, outline-color 0.12s, box-shadow 0.12s, opacity 0.12s;
+  cursor: default;
+  position: relative;
+}
+
+.ip-node:hover {
+  background: rgba(var(--node-rgb), 0.18);
+  border-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.82),
+              0 0 0 1px rgba(var(--node-rgb), 0.3),
+              0 0 18px rgba(var(--node-rgb), 0.34),
+              0 0 34px rgba(var(--node-rgb), 0.14);
+  opacity: 1;
+}
+
+.ip-node.selected {
+  background: rgba(var(--node-rgb), 0.24);
+  border-color: var(--node-color);
+  outline-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 2px rgba(var(--node-rgb), 0.98),
+              0 0 0 2px rgba(var(--node-rgb), 0.42),
+              0 0 20px rgba(var(--node-rgb), 0.58),
+              0 0 42px rgba(var(--node-rgb), 0.24);
+  opacity: 1;
+}
+
+/* ===== 左侧：名称格子（同时承载 input handle） ===== */
+.ip-name-cell {
+  flex-shrink: 0;
+  width: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  background: rgba(var(--node-rgb), 0.12);
+  border-right: 1px solid rgba(var(--node-rgb), 0.22);
+  border-radius: 3px 0 0 3px;
+  user-select: none;
+  cursor: grab;
+  min-height: 58px;
+  position: relative;
+}
+
+.ip-node:active .ip-name-cell {
+  cursor: grabbing;
+}
+
+.ip-name {
+  font-size: 0.63rem;
+  font-weight: 700;
+  color: rgba(var(--node-rgb), 0.84);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  max-height: 120px;
+}
+
+/* ===== 中央：预览区 ===== */
+.ip-preview-cell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--node-rgb), 0.06);
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+  overflow: hidden;
+  min-height: 58px;
+  position: relative;
+  transition: background 0.15s;
+}
+
+.ip-preview-cell:not(.has-image) {
+  border: 1.5px dashed rgba(var(--node-rgb), 0.28);
+  margin: 6px 6px 6px 0;
+  border-radius: 3px;
+}
+
+.ip-preview-cell:not(.has-image):hover {
+  border-color: rgba(var(--node-rgb), 0.58);
+  background: rgba(var(--node-rgb), 0.08);
+}
+
+/* ===== 占位（未连接）===== */
+.ip-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  pointer-events: none;
+}
+
+.ip-icon {
+  width: 22px;
+  height: 22px;
+  color: rgba(var(--node-rgb), 0.38);
+  flex-shrink: 0;
+}
+
+.ip-preview-cell:hover .ip-icon {
+  color: rgba(var(--node-rgb), 0.68);
+}
+
+.ip-hint {
+  font-size: 0.58rem;
+  color: rgba(var(--node-rgb), 0.44);
+  text-align: center;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.ip-preview-cell:hover .ip-hint {
+  color: rgba(var(--node-rgb), 0.74);
+}
+
+/* ===== 有图状态：图片填充 ===== */
+.ip-preview-cell.has-image {
+  padding: 0;
+  border-radius: 0 3px 3px 0;
+}
+
+.ip-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 0 3px 3px 0;
+  pointer-events: none;
+  user-select: none;
+}

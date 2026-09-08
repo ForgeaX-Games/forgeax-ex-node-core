@@ -1,0 +1,50 @@
+{
+  "id": "list_remove_by_index",
+  "label": "删除",
+  "name-en": "Remove",
+  "description": "按索引 list 删除一级外层 list 中的元素。",
+  "description-en": "Remove elements from a list by a index list.",
+  "icon": "一排橙色方块列表中，若干方块被标记为红色并消失，剩余方块向左合拢成新列表，扁平插画风格，橙色和红色为主色，背景简洁浅灰。",
+  "version": "1.1.0",
+  "tags": [
+    "list",
+    "remove",
+    "index"
+  ],
+  "tag_labels": [
+    "列表",
+    "删除",
+    "索引"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "inputs": [
+    {
+      "name": "list",
+      "type": "any",
+      "access": "list",
+      "label": "列表",
+      "description": "原始一级 list",
+      "description-en": "Source list."
+    },
+    {
+      "name": "indices",
+      "type": "number",
+      "access": "list",
+      "label": "索引",
+      "description": "要删除的索引 list，支持负数",
+      "description-en": "Rank-1 index list; negative indices are supported."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "list",
+      "type": "any",
+      "access": "list",
+      "label": "列表",
+      "description": "删除后的一级 list",
+      "description-en": "Rank-1 list after removal."
+    }
+  ]
+}

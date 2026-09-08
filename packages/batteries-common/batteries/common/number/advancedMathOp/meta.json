@@ -1,0 +1,71 @@
+{
+  "id": "advanced_math_op",
+  "label": "进阶",
+  "name-en": "AdvMath",
+  "description": "对数字执行进阶数学运算：平方根、立方根、取整（向下/向上/四舍五入）、最值、对数",
+  "description-en": "Perform advanced math operations: sqrt, cbrt, floor, ceil, round, min, max, log.",
+  "icon": "一个数字上方有根号和对数符号，扁平插画风格，简洁小图标，主色2种。",
+  "version": "1.0.0",
+  "lacing": "longest",
+  "tags": [
+    "basic",
+    "utility",
+    "number",
+    "math"
+  ],
+  "tag_labels": [
+    "基础",
+    "工具",
+    "数值",
+    "数学"
+  ],
+  "inputs": [
+    {
+      "name": "a",
+      "type": "number",
+      "access": "item",
+      "label": "数字 A",
+      "default": 0,
+      "description": "第一个操作数；单目运算（sqrt/cbrt/floor/ceil/round）时仅使用此值",
+      "description-en": "First operand; unary operations (sqrt/cbrt/floor/ceil/round) use only this value."
+    },
+    {
+      "name": "b",
+      "type": "number",
+      "access": "item",
+      "label": "数字 B",
+      "default": 1,
+      "description": "第二个操作数；单目运算时忽略；log 运算时作为底数",
+      "description-en": "Second operand; ignored for unary operations; used as base for log."
+    },
+    {
+      "name": "op",
+      "type": "string",
+      "access": "tree",
+      "label": "运算",
+      "default": "sqrt",
+      "description": "选择要执行的运算",
+      "description-en": "Select the operation to perform.",
+      "options": [
+        "sqrt",
+        "cbrt",
+        "floor",
+        "ceil",
+        "round",
+        "min",
+        "max",
+        "log"
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "number",
+      "access": "item",
+      "label": "结果",
+      "description": "运算结果",
+      "description-en": "Computation result."
+    }
+  ]
+}

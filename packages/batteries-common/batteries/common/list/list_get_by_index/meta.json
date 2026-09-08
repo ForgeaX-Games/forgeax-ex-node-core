@@ -1,0 +1,80 @@
+{
+  "id": "list_get_by_index",
+  "label": "多取",
+  "name-en": "GetMany",
+  "description": "按 index list 或动态 index 从一级外层 list 中提取元素。",
+  "description-en": "Extract items from a list by an index list or dynamic indices.",
+  "icon": "一个橙色列表图标，右侧伸出多条箭头指向对应位置的元素标签，箭头旁有数字下标符号，扁平插画风格，背景简洁白色，主色为橙和绿",
+  "version": "1.1.0",
+  "tags": [
+    "list",
+    "index",
+    "get"
+  ],
+  "tag_labels": [
+    "列表",
+    "索引",
+    "取值"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "inputs": [
+    {
+      "name": "list",
+      "type": "any",
+      "access": "list",
+      "label": "列表",
+      "description": "源一级 list",
+      "description-en": "Source list."
+    },
+    {
+      "name": "indexList",
+      "type": "number",
+      "access": "list",
+      "label": "索引列",
+      "description": "一维 index list",
+      "description-en": "Rank-1 index list."
+    },
+    {
+      "name": "index_0",
+      "type": "number",
+      "access": "item",
+      "label": "Index 0",
+      "description": "第 0 个下标",
+      "description-en": "0th index."
+    },
+    {
+      "name": "index_1",
+      "type": "number",
+      "access": "item",
+      "label": "Index 1",
+      "description": "第 1 个下标；连接后自动追加",
+      "description-en": "1st index; connecting it appends a new slot."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "subList",
+      "type": "any",
+      "access": "list",
+      "label": "子列",
+      "description": "按 indexList 提取的一级 list",
+      "description-en": "Rank-1 list extracted by indexList."
+    }
+  ],
+  "dynamicInputs": {
+    "prefix": "index_",
+    "labelTemplate": "Index $i",
+    "minCount": 2,
+    "type": "number",
+    "access": "item"
+  },
+  "dynamicOutputs": {
+    "prefix": "item_",
+    "labelTemplate": "Item [$i]",
+    "minCount": 1,
+    "type": "any",
+    "access": "item"
+  }
+}

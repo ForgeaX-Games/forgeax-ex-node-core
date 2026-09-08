@@ -1,0 +1,243 @@
+.proj-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.proj-modal {
+  width: min(640px, 92vw);
+  max-height: 82vh;
+  overflow: auto;
+  background: var(--panel-bg, #1c1f26);
+  color: var(--panel-fg, #e6e8ee);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+  padding: 18px 20px 20px;
+}
+
+.proj-modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.proj-modal__head h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.proj-modal__head-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.proj-empty {
+  opacity: 0.6;
+  padding: 24px;
+  text-align: center;
+}
+
+.proj-card {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.proj-card--active {
+  border-color: #4f8cff;
+  box-shadow: 0 0 0 1px #4f8cff inset;
+}
+
+.proj-card__open {
+  flex: 1;
+  text-align: left;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 12px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.proj-card__open:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.proj-card__type {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.55;
+}
+
+.proj-card__name {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.proj-card__name-input {
+  font-size: 14px;
+  font-weight: 600;
+  background: #11131a;
+  border: 1px solid #4f8cff;
+  border-radius: 4px;
+  color: inherit;
+  padding: 2px 6px;
+}
+
+.proj-card__badge {
+  align-self: flex-start;
+  font-size: 10px;
+  color: #4f8cff;
+  border: 1px solid #4f8cff;
+  border-radius: 999px;
+  padding: 0 7px;
+}
+
+.proj-card__actions {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.proj-card__action {
+  flex: 1;
+  background: none;
+  border: none;
+  color: inherit;
+  opacity: 0.7;
+  cursor: pointer;
+  padding: 0 10px;
+}
+
+.proj-card__action:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.proj-card__action--danger:hover {
+  color: #ff6b6b;
+}
+
+.proj-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.proj-field span {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.proj-field input,
+.proj-field select {
+  background: #11131a;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  color: inherit;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.proj-error {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.proj-modal__foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.proj-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: inherit;
+  border-radius: 6px;
+  padding: 7px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.proj-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.proj-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.proj-btn--primary {
+  background: #4f8cff;
+  border-color: #4f8cff;
+  color: #fff;
+}
+
+.proj-btn--primary:hover {
+  background: #3d7bf0;
+}
+
+.proj-btn--danger {
+  background: #d04545;
+  border-color: #d04545;
+  color: #fff;
+}
+
+.proj-btn--danger:hover {
+  background: #b93b3b;
+}
+
+.proj-delete__copy {
+  font-size: 13px;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+.proj-delete__policy {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.proj-delete__policy legend {
+  font-size: 11px;
+  opacity: 0.6;
+  padding: 0 4px;
+}
+
+.proj-delete__policy label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+}

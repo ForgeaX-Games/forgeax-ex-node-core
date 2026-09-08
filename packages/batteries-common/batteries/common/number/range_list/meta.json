@@ -1,0 +1,85 @@
+{
+  "id": "range_list",
+  "label": "数列",
+  "name-en": "Range",
+  "description": "生成从 start 到 end 的等间距数值序列，可选添加前缀生成字符串序列",
+  "description-en": "Generate an evenly-spaced numeric sequence from start to end. Optionally prepend a prefix to produce a string sequence.",
+  "icon": "一个从左到右排列的递增数字序列 1 2 3 ... N，扁平插画风格，简洁小图标，主色蓝灰两色",
+  "version": "1.1.0",
+  "lacing": "longest",
+  "tags": [
+    "number",
+    "range",
+    "sequence"
+  ],
+  "tag_labels": [
+    "数值",
+    "范围",
+    "序列"
+  ],
+  "inputs": [
+    {
+      "name": "start",
+      "type": "number",
+      "access": "item",
+      "label": "起点",
+      "default": 1,
+      "description": "序列起始值",
+      "description-en": "Start value of the range."
+    },
+    {
+      "name": "end",
+      "type": "number",
+      "access": "item",
+      "label": "终点",
+      "default": 10,
+      "description": "序列结束值（含）",
+      "description-en": "End value of the range (inclusive)."
+    },
+    {
+      "name": "step",
+      "type": "number",
+      "access": "item",
+      "label": "步长",
+      "default": 1,
+      "min": 0.001,
+      "description": "相邻元素的间距，必须大于 0",
+      "description-en": "Spacing between consecutive elements; must be > 0."
+    },
+    {
+      "name": "prefix",
+      "type": "string",
+      "access": "item",
+      "label": "前缀",
+      "default": "",
+      "description": "字符串前缀。非空时输出带前缀的字符串序列",
+      "description-en": "String prefix. When non-empty, stringList output is generated with the prefix."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "list",
+      "type": "number",
+      "access": "list",
+      "label": "数列",
+      "description": "生成的一维数值序列",
+      "description-en": "Generated rank-1 numeric sequence."
+    },
+    {
+      "name": "stringList",
+      "type": "string",
+      "access": "list",
+      "label": "文本列",
+      "description": "带前缀的一维字符串序列",
+      "description-en": "Generated rank-1 string sequence with prefix."
+    },
+    {
+      "name": "count",
+      "type": "number",
+      "access": "item",
+      "label": "数量",
+      "description": "序列中的元素总数",
+      "description-en": "Total number of elements in the sequence."
+    }
+  ]
+}

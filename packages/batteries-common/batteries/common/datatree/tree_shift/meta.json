@@ -1,0 +1,52 @@
+{
+  "id": "tree_shift",
+  "label": "Shift",
+  "name-en": "Shift",
+  "description": "砍 path 头部 n 段；剩余 path 必须 ≥1。",
+  "description-en": "Drop the leading n segments of every path. Remaining path length must be ≥1.",
+  "icon": "一棵层级树图标，左侧最浅一层 branch 被一把剪刀虚线剪掉，扁平插画风格，主色2种。",
+  "version": "1.0.0",
+  "tags": [
+    "datatree",
+    "operator",
+    "shift"
+  ],
+  "tag_labels": [
+    "数据树",
+    "算子",
+    "shift"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "inputs": [
+    {
+      "name": "tree",
+      "type": "any",
+      "access": "tree",
+      "label": "树",
+      "description": "源 DataTree",
+      "description-en": "Source DataTree."
+    },
+    {
+      "name": "n",
+      "type": "number",
+      "access": "tree",
+      "required": false,
+      "default": 1,
+      "label": "层数",
+      "description": "砍掉的头部段数（≥0）",
+      "description-en": "Number of leading path segments to drop (≥0)."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "tree",
+      "type": "any",
+      "access": "tree",
+      "label": "树",
+      "description": "shift 后的 DataTree",
+      "description-en": "Shifted DataTree."
+    }
+  ]
+}

@@ -1,0 +1,749 @@
+/* 💡 电池选择栏样式（竖向版）
+ * 顶层结构（develop 模式）：
+ *   .battery-bar.battery-bar--vertical
+ *     └── .bb-scroller                        整列纵向滚动容器
+ *           └── .bb-big-section               大标签（手风琴一级）
+ *                 ├── .bb-big-header          大标签头（点击切换展开，draggable 用于排序）
+ *                 └── .bb-small-list          (active 时显示) 小标签列表
+ *                       └── .bb-small-section
+ *                             ├── .bb-small-header
+ *                             │     ├── .bb-small-toggle    点击切换 open
+ *                             │     └── .label-expand-btn   + 号：覆盖层模式
+ *                             └── .bb-row-list (open 时显示)
+ *                                   └── .battery-row        电池条目（图标+名称单行）
+ *           └── .bb-expanded-overlay          (+ 号展开时) 绝对定位多列网格
+ *     └── .bb-resize-handle                   右侧宽度拖拽把手
+ *
+ * Templates 模式：与 Develop 共用竖向手风琴；琥珀金强调色见文件末尾 `.mode-templates` 分区。
+ *
+ * 历史避坑：
+ *   - 覆盖层用 getBoundingClientRect 差值定位（不要 offsetTop+gap 累加，见 bugs/battery-bar-style.md 2026-03-17）
+ *   - 绝不要用 `overflow: hidden` 隐藏滚动条，会裁切 absolute 覆盖层（见 bugs/battery-bar-style.md 2026-04-13）
+ *     需要时改用 `scrollbar-width: none` + `::-webkit-scrollbar { display: none }`
+ *   - 圆形 + 号严禁用字符 content，必须用 ::before/::after CSS 矩形画十字（见 2026-03-10）
+ */
+
+.battery-bar {
+  background: linear-gradient(180deg, rgba(16, 25, 18, 0.96), rgba(9, 14, 11, 0.98));
+  display: flex;
+  flex-direction: column;
+  position: relative;        /* .bb-resize-handle 的定位基准 */
+  flex-shrink: 0;
+}
+
+.battery-bar--vertical {
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: hidden;          /* 限制内部滚动/覆盖层范围，避免越过电池栏列 */
+}
+
+/* 拖宽时禁用全局选择，避免 mousemove 文本被选中 */
+body.bb-resizing {
+  cursor: col-resize !important;
+  user-select: none;
+}
+
+/* 搜索结果计数行 */
+.search-result-count {
+  padding: 4px 10px;
+  font-size: 10.5px;
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 纵向滚动主容器 ─────────────────────────────────────────────────────── */
+.bb-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.bb-big-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  flex: 0 0 32px;
+  width: 32px;
+  padding: 4px 3px;
+  gap: 3px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.16);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  scrollbar-width: none;
+  transition: flex-basis 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              width 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              background-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+  will-change: width, flex-basis;
+}
+
+.bb-big-rail--expanded {
+  flex-basis: 98px;
+  width: 98px;
+  background: rgba(0, 0, 0, 0.24);
+  box-shadow: 8px 0 18px rgba(0, 0, 0, 0.18);
+}
+
+.bb-big-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.bb-rail-button {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  padding-left: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              color var(--transition-fast),
+              width 180ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              padding 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.bb-big-rail--expanded .bb-rail-button {
+  width: 92px;
+  justify-content: flex-start;
+  padding-left: 5px;
+}
+
+.bb-rail-button-short {
+  flex: 0 0 auto;
+  text-align: left;
+  line-height: 1.25;
+}
+
+.bb-rail-button-rest {
+  min-width: 0;
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 140ms ease, transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.bb-big-rail--expanded .bb-rail-button-rest {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.bb-rail-button:hover {
+  background-color: rgba(var(--color-accent-rgb), 0.10);
+  color: var(--color-text-primary);
+}
+
+.bb-rail-button.active {
+  background-color: rgba(var(--color-accent-rgb), 0.16);
+  border-color: rgba(var(--color-accent-rgb), 0.35);
+  color: var(--color-text-primary);
+}
+
+.bb-rail-button.tab-dragging {
+  opacity: 0.35;
+}
+
+.bb-rail-button.tab-drag-over {
+  box-shadow: inset 0 2px 0 0 var(--color-accent);
+}
+
+.bb-rail-button.tab-json { color: #FCA823; }
+.bb-rail-button.tab-json:hover,
+.bb-rail-button.tab-json.active {
+  background-color: rgba(217, 119, 6, 0.16);
+  border-color: rgba(217, 119, 6, 0.35);
+  color: #fcd34d;
+}
+
+.bb-rail-button.tab-common { color: #c084fc; }
+.bb-rail-button.tab-common:hover,
+.bb-rail-button.tab-common.active {
+  background-color: rgba(147, 51, 234, 0.16);
+  border-color: rgba(147, 51, 234, 0.35);
+  color: #d8b4fe;
+}
+
+.bb-rail-button.tab-ai { color: #FC8181; }
+.bb-rail-button.tab-ai:hover,
+.bb-rail-button.tab-ai.active {
+  background-color: rgba(220, 38, 38, 0.16);
+  border-color: rgba(220, 38, 38, 0.35);
+  color: #fca5a5;
+}
+
+.bb-rail-button.tab-special { color: #60a5fa; }
+.bb-rail-button.tab-special:hover,
+.bb-rail-button.tab-special.active {
+  background-color: rgba(37, 99, 235, 0.16);
+  border-color: rgba(37, 99, 235, 0.35);
+  color: #93c5fd;
+}
+
+.bb-rail-button.tab-groups { color: #34d399; }
+.bb-rail-button.tab-groups:hover,
+.bb-rail-button.tab-groups.active {
+  background-color: rgba(16, 185, 129, 0.16);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #6ee7b7;
+}
+
+.bb-scroller {
+  position: relative;        /* .bb-expanded-overlay 的定位基准 */
+  flex: 1;
+  min-height: 0;
+  padding: 4px 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.bb-scroller::-webkit-scrollbar {
+  width: 6px;
+}
+.bb-scroller::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+.bb-scroller::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+/* 展开覆盖层激活时：滚动条隐藏（避免修改 overflow，否则会裁切覆盖层） */
+.bb-scroller--has-overlay {
+  scrollbar-width: none;
+}
+.bb-scroller--has-overlay::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── 大标签（手风琴一级） ──────────────────────────────────────────────── */
+.bb-big-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.bb-big-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  height: 28px;
+  padding: 0 10px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid transparent;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.bb-big-header:hover {
+  background-color: rgba(var(--color-accent-rgb), 0.08);
+  color: var(--color-text-primary);
+}
+
+/* 通用 active：左侧 2px 强调色竖条 + 加深背景 + 主文字 */
+.bb-big-header.active {
+  background-color: rgba(var(--color-accent-rgb), 0.10);
+  color: var(--color-text-primary);
+}
+.bb-big-header.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--color-accent);
+}
+
+/* 大标签三角图标：默认 ▶，展开后 ▼ */
+.bb-chevron {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  font-size: 8px;
+  line-height: 1;
+  color: var(--color-text-secondary);
+  transition: transform var(--transition-fast), color var(--transition-fast);
+  transform: rotate(0deg);
+  flex-shrink: 0;
+}
+.bb-chevron--open {
+  transform: rotate(90deg);
+}
+.bb-big-header.active .bb-chevron {
+  color: var(--color-accent);
+}
+
+.bb-big-text {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── 品牌色大标签（保留原 pill 配色，转换为竖条 + 文字色） ────────────── */
+.bb-big-header.tab-json { color: #FCA823; }
+.bb-big-header.tab-json:hover { background-color: rgba(217, 119, 6, 0.10); color: #fcd34d; }
+.bb-big-header.tab-json.active { background-color: rgba(217, 119, 6, 0.16); color: #fcd34d; }
+.bb-big-header.tab-json.active::before { background: #d97706; }
+.bb-big-header.tab-json.active .bb-chevron { color: #fcd34d; }
+
+.bb-big-header.tab-common { color: #c084fc; }
+.bb-big-header.tab-common:hover { background-color: rgba(147, 51, 234, 0.10); color: #d8b4fe; }
+.bb-big-header.tab-common.active { background-color: rgba(147, 51, 234, 0.16); color: #d8b4fe; }
+.bb-big-header.tab-common.active::before { background: #9333ea; }
+.bb-big-header.tab-common.active .bb-chevron { color: #d8b4fe; }
+
+.bb-big-header.tab-ai { color: #FC8181; }
+.bb-big-header.tab-ai:hover { background-color: rgba(220, 38, 38, 0.10); color: #fca5a5; }
+.bb-big-header.tab-ai.active { background-color: rgba(220, 38, 38, 0.16); color: #fca5a5; }
+.bb-big-header.tab-ai.active::before { background: #dc2626; }
+.bb-big-header.tab-ai.active .bb-chevron { color: #fca5a5; }
+
+.bb-big-header.tab-special { color: #60a5fa; }
+.bb-big-header.tab-special:hover { background-color: rgba(37, 99, 235, 0.10); color: #93c5fd; }
+.bb-big-header.tab-special.active { background-color: rgba(37, 99, 235, 0.16); color: #93c5fd; }
+.bb-big-header.tab-special.active::before { background: #2563eb; }
+.bb-big-header.tab-special.active .bb-chevron { color: #93c5fd; }
+
+.bb-big-header.tab-groups { color: #34d399; }
+.bb-big-header.tab-groups:hover { background-color: rgba(16, 185, 129, 0.10); color: #6ee7b7; }
+.bb-big-header.tab-groups.active { background-color: rgba(16, 185, 129, 0.16); color: #6ee7b7; }
+.bb-big-header.tab-groups.active::before { background: #059669; }
+.bb-big-header.tab-groups.active .bb-chevron { color: #6ee7b7; }
+
+/* ── 大标签内容分组（右侧全量目录，组间用横线分隔） ─────────────────────── */
+.bb-big-content-section {
+  display: flex;
+  flex-direction: column;
+  padding: 2px 0 6px;
+}
+
+.bb-big-content-section--separated {
+  border-top: 1px solid rgba(255, 255, 255, 0.32);
+  margin-top: 6px;
+  padding-top: 6px;
+}
+
+/* 空的大分类行与左侧 rail 的 26px 按钮 + 3px gap 垂直步进对齐。 */
+.bb-big-content-section:has(> .battery-empty-small:only-child) {
+  min-height: 29px;
+  padding: 0;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.bb-big-content-section--separated:has(> .battery-empty-small:only-child) {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.bb-big-content-section:has(> .battery-empty-small:only-child) > .battery-empty-small {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 0 0 28px;
+  box-sizing: border-box;
+}
+
+/* ── 小标签列表（手风琴二级） ──────────────────────────────────────────── */
+.bb-small-list {
+  display: flex;
+  flex-direction: column;
+  padding: 2px 0 6px;
+}
+
+.bb-small-section {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.bb-small-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 8px 0 14px;
+  cursor: pointer;
+}
+
+.bb-small-toggle {
+  flex: 1;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  height: 100%;
+  color: var(--color-accent);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.bb-small-toggle:hover {
+  color: var(--color-accent-strong, #d4ff48);
+}
+
+.bb-chevron--sm {
+  width: 7px;
+  height: 7px;
+  font-size: 7px;
+}
+
+.bb-small-text {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bb-small-count {
+  font-size: 9px;
+  color: currentColor;
+  opacity: 1;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+  padding-left: 4px;
+}
+
+/* ── 小标签 + 号（圆形展开按钮，CSS 矩形画十字防字体偏移） ────────────── */
+.label-expand-btn {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 13px;
+  height: 13px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--color-accent-rgb), 0.48);
+  background: rgba(var(--color-accent-rgb), 0.16);
+  color: var(--color-accent);
+  font-size: 0;
+  cursor: pointer;
+  transition: background var(--transition-fast),
+              border-color var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.label-expand-btn::before,
+.label-expand-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: currentColor;
+  border-radius: 1px;
+}
+.label-expand-btn::before { width: 1.5px; height: 7px; transform: translate(-50%, -50%); }
+.label-expand-btn::after  { width: 7px; height: 1.5px; transform: translate(-50%, -50%); }
+
+.label-expand-btn:hover {
+  border-color: var(--color-accent);
+  background: rgba(var(--color-accent-rgb), 0.30);
+  color: white;
+  transform: scale(1.12);
+}
+
+.label-expand-btn.active {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-accent-contrast, #10170e);
+  transform: rotate(45deg) scale(1.1);
+}
+
+/* ── 电池行列表 ────────────────────────────────────────────────────────── */
+.bb-row-list {
+  display: flex;
+  flex-direction: column;
+  padding: 1px 0 2px;
+}
+
+/* 单行电池条目：图标 + 名称（含 ellipsis） + 可选 meta（星 + 数字角标） */
+.battery-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 28px;
+  padding-left: 20px;       /* 缩进体现三级层次，同时给 24px 图标留出更充分的显示空间 */
+  padding-right: 8px;
+  cursor: grab;
+  user-select: none;
+  border-radius: var(--radius-sm);
+  margin: 0 4px;
+  transition: background-color var(--transition-fast);
+}
+
+.battery-row:hover {
+  background-color: rgba(var(--color-accent-rgb), 0.10);
+}
+
+.battery-row:active {
+  cursor: grabbing;
+}
+
+.battery-row-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.battery-row-icon-svg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.battery-row-icon-svg svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.battery-row-icon-fallback {
+  font-size: 15px;
+  line-height: 1;
+  color: var(--color-text-secondary);
+}
+
+.battery-row-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 11.5px;
+  color: var(--color-text-primary);
+  /* line-height 1.4 给 g/y/p/q 等下伸字符留出 inline box 空间，
+     避免 overflow:hidden 把 descender 部分裁掉（line-height:1 时 inline box 紧贴 em-box，
+     下伸部分会伸出被裁）。row 自身 height 固定，文字仍垂直居中，仅扩大渲染盒高度。 */
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.battery-row-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  font-size: 9px;
+  color: var(--color-text-secondary);
+  pointer-events: none;     /* meta 不拦截拖拽 */
+}
+
+.battery-row-stars {
+  color: #f5c518;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.battery-row-note-count {
+  opacity: 0.7;
+  font-variant-numeric: tabular-nums;
+  min-width: 10px;
+  text-align: right;
+}
+
+/* 空状态 */
+.battery-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 16px 8px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.battery-empty-small {
+  color: var(--color-text-secondary);
+  font-size: 10px;
+  font-style: italic;
+  padding: 4px 0 4px 28px;
+  opacity: 0.6;
+}
+
+/* ── 拖拽排序：高亮当前 over 项（竖向：用 border-top 横条） ──────────── */
+.bb-small-section.group-dragging {
+  opacity: 0.35;
+}
+
+.bb-small-section.group-drag-over > .bb-small-header {
+  box-shadow: inset 0 2px 0 0 var(--color-accent);
+}
+
+/* ── 小标签 + 号展开覆盖层：多列网格平铺电池 ───────────────────────────── */
+.bb-expanded-overlay {
+  z-index: 10;
+  background: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden auto;
+}
+
+.bb-expanded-overlay::-webkit-scrollbar {
+  width: 6px;
+}
+.bb-expanded-overlay::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+.bb-expanded-overlay-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px 4px;
+  padding: 6px 4px;
+}
+
+.bb-expanded-overlay-grid .battery-row {
+  margin: 0;
+  padding-left: 8px;      /* 覆盖层模式去掉三级缩进，因为有自己的网格 */
+}
+
+/* ── 右侧宽度拖拽把手（贴在 aside 右边缘全高） ───────────────────────── */
+.bb-resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  cursor: col-resize;
+  background: transparent;
+  z-index: 20;
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.bb-resize-handle:hover,
+body.bb-resizing .bb-resize-handle {
+  background: var(--color-accent);
+  box-shadow: 0 0 10px rgba(var(--color-accent-rgb), 0.28);
+}
+
+/* ── 右键上下文菜单 ───────────────────────────────────────────────────── */
+.battery-context-menu {
+  position: fixed;
+  z-index: 9999;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  min-width: 130px;
+  padding: 4px 0;
+  user-select: none;
+}
+
+.battery-context-menu-item {
+  padding: 6px 14px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background var(--transition-fast);
+}
+
+.battery-context-menu-item:hover {
+  background: var(--color-accent-hover);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   TEMPLATES 模式：竖向手风琴琥珀金强调（与 Toolbar 模板切换品牌色一致）
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.battery-bar.mode-templates .bb-big-header {
+  color: rgba(251, 191, 36, 0.75);
+}
+
+.battery-bar.mode-templates .bb-big-rail {
+  background: rgba(120, 53, 15, 0.14);
+  border-right-color: rgba(251, 191, 36, 0.12);
+}
+
+.battery-bar.mode-templates .bb-rail-button {
+  color: rgba(251, 191, 36, 0.78);
+}
+.battery-bar.mode-templates .bb-rail-button:hover,
+.battery-bar.mode-templates .bb-rail-button.active {
+  background-color: rgba(251, 191, 36, 0.14);
+  border-color: rgba(251, 191, 36, 0.34);
+  color: #fde68a;
+}
+
+.battery-bar.mode-templates .bb-big-header:hover {
+  background-color: rgba(251, 191, 36, 0.08);
+  color: #fbbf24;
+}
+.battery-bar.mode-templates .bb-big-header.active {
+  background-color: rgba(251, 191, 36, 0.12);
+  color: #fde68a;
+}
+.battery-bar.mode-templates .bb-big-header.active::before {
+  background: linear-gradient(180deg, #b45309 0%, #f59e0b 100%);
+}
+.battery-bar.mode-templates .bb-big-header.active .bb-chevron {
+  color: #fbbf24;
+}
+
+.battery-bar.mode-templates .bb-small-toggle {
+  color: rgba(251, 191, 36, 0.85);
+}
+.battery-bar.mode-templates .bb-small-toggle:hover {
+  color: #fcd34d;
+}
+
+.battery-bar.mode-templates .label-expand-btn {
+  border-color: rgba(251, 191, 36, 0.35);
+  color: rgba(251, 191, 36, 0.8);
+}
+.battery-bar.mode-templates .label-expand-btn:hover,
+.battery-bar.mode-templates .label-expand-btn.active {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.55);
+  color: #fde68a;
+}

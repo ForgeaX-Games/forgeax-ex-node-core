@@ -1,0 +1,42 @@
+{
+  "id": "tree_simplify",
+  "label": "Simplify",
+  "name-en": "Simplify",
+  "description": "剥所有 branch 共享的 path 前缀；至少保留一段（避免任何 path 被砍空）。0/1 个 branch 的树原样返回。",
+  "description-en": "Strip the common prefix shared by all branches; always retain at least one path segment. Trees with 0/1 branch pass through unchanged.",
+  "icon": "一棵层级树图标，根节点上的共同前缀被淡化或剪掉，子分支保留显示，扁平插画风格，主色2种。",
+  "version": "1.0.0",
+  "tags": [
+    "datatree",
+    "operator",
+    "simplify"
+  ],
+  "tag_labels": [
+    "数据树",
+    "算子",
+    "simplify"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "inputs": [
+    {
+      "name": "tree",
+      "type": "any",
+      "access": "tree",
+      "label": "树",
+      "description": "源 DataTree",
+      "description-en": "Source DataTree."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "tree",
+      "type": "any",
+      "access": "tree",
+      "label": "树",
+      "description": "simplify 后的 DataTree",
+      "description-en": "Simplified DataTree."
+    }
+  ]
+}

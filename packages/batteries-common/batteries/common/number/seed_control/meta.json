@@ -1,0 +1,43 @@
+{
+  "id": "seed_control",
+  "label": "种子",
+  "name-en": "Seed",
+  "description": "统一的随机种子控制节点，输入一个种子数值并原样输出，用于同时驱动多个下游随机节点",
+  "description-en": "Unified random seed control. Passes a seed number through unchanged for driving multiple downstream random nodes.",
+  "icon": "一颗种子或骰子图标旁边有分叉箭头向多个方向输出，扁平插画风格，简洁小图标，主色绿灰两色",
+  "version": "1.1.0",
+  "lacing": "longest",
+  "tags": [
+    "number",
+    "seed",
+    "random",
+    "control"
+  ],
+  "tag_labels": [
+    "数值",
+    "种子",
+    "随机",
+    "控制"
+  ],
+  "inputs": [
+    {
+      "name": "seed",
+      "type": "number",
+      "access": "item",
+      "label": "种子",
+      "default": 0,
+      "description": "随机种子数值，0 表示使用默认种子",
+      "description-en": "Random seed value; 0 uses default seed."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "seed",
+      "type": "number",
+      "access": "item",
+      "label": "种子",
+      "description": "透传的随机种子数值，与输入相同",
+      "description-en": "Pass-through seed value, same as input."
+    }
+  ]
+}

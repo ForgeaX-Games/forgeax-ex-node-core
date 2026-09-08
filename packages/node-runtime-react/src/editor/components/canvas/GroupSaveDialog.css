@@ -1,0 +1,188 @@
+/* 💡 成组电池保存弹窗样式 */
+
+.gsd-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+}
+
+.gsd-modal {
+  background: var(--color-bg-primary, #1a1a2e);
+  border: 1px solid rgba(20, 184, 166, 0.4);
+  border-radius: var(--radius-lg, 10px);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(20, 184, 166, 0.12);
+  width: 360px;
+  max-width: 90vw;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── 头部 ────────────────────────────────────────────────── */
+.gsd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(20, 184, 166, 0.18);
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.15), rgba(20, 184, 166, 0.06));
+  border-radius: var(--radius-lg, 10px) var(--radius-lg, 10px) 0 0;
+}
+
+.gsd-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(20, 184, 166, 0.95);
+  letter-spacing: 0.02em;
+}
+
+.gsd-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.gsd-close:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── 主体 ────────────────────────────────────────────────── */
+.gsd-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.gsd-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gsd-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.gsd-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-sm, 6px);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  padding: 7px 10px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.gsd-input:focus {
+  border-color: rgba(20, 184, 166, 0.6);
+  box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.15);
+}
+
+.gsd-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* 分类快捷选择 chips */
+.gsd-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.gsd-chip {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 11px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.gsd-chip:hover {
+  background: rgba(20, 184, 166, 0.12);
+  border-color: rgba(20, 184, 166, 0.4);
+  color: rgba(20, 184, 166, 0.9);
+}
+
+.gsd-chip--active {
+  background: rgba(20, 184, 166, 0.2);
+  border-color: rgba(20, 184, 166, 0.6);
+  color: rgba(20, 184, 166, 1);
+}
+
+.gsd-error {
+  font-size: 12px;
+  color: rgba(248, 113, 113, 0.9);
+  padding: 6px 10px;
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  border-radius: var(--radius-sm, 6px);
+}
+
+/* ── 底部 ────────────────────────────────────────────────── */
+.gsd-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.gsd-btn {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 16px;
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, opacity 0.15s;
+  line-height: 1;
+}
+
+.gsd-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.gsd-btn--cancel {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.gsd-btn--cancel:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.gsd-btn--save {
+  background: rgba(20, 184, 166, 0.25);
+  border: 1px solid rgba(20, 184, 166, 0.55);
+  color: rgba(20, 184, 166, 1);
+}
+
+.gsd-btn--save:hover:not(:disabled) {
+  background: rgba(20, 184, 166, 0.38);
+  border-color: rgba(20, 184, 166, 0.8);
+}

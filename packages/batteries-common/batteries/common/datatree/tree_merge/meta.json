@@ -1,0 +1,57 @@
+{
+  "id": "tree_merge",
+  "label": "Merge",
+  "name-en": "Merge",
+  "description": "自适应合并多个 DataTree：slot[0] 首次连接的上游 access 决定行为档位 — item 级走 path 并集 + items 顺序串联（保留多分支结构），list/tree 级走 [i] 前置 pack。后续 slot 类型必须与 slot[0] 一致。支持动态扩展端口。",
+  "description-en": "Adaptive merge: behavior is locked by the upstream access at slot[0]'s first connection. item-tier → union paths + concat items per path (preserves branch structure); list/tree-tier → prepend [i] pack. Subsequent slots must match slot[0]'s type. Supports dynamic ports.",
+  "icon": "多棵层级树从不同方向汇聚成一棵更大的树，扁平插画风格，主色2种。",
+  "version": "2.0.0",
+  "tags": [
+    "datatree",
+    "operator",
+    "merge"
+  ],
+  "tag_labels": [
+    "数据树",
+    "算子",
+    "merge"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "inputs": [
+    {
+      "name": "item_0",
+      "type": "any",
+      "access": "tree",
+      "label": "[0]",
+      "description": "第 0 个输入；其所有 path 前置 [0] 段后并入结果",
+      "description-en": "0-th input; all its paths get [0] prepended and merged into the result."
+    },
+    {
+      "name": "item_1",
+      "type": "any",
+      "access": "tree",
+      "label": "[1]",
+      "description": "第 1 个输入；其所有 path 前置 [1] 段后并入结果",
+      "description-en": "1-st input; all its paths get [1] prepended and merged into the result."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "tree",
+      "type": "any",
+      "access": "tree",
+      "label": "树",
+      "description": "升一维后的 DataTree；输入 i 的 path P 在结果中变为 [i, ...P]",
+      "description-en": "DataTree with one extra outer dimension; input i's path P becomes [i, ...P]."
+    }
+  ],
+  "dynamicInputs": {
+    "prefix": "item_",
+    "labelTemplate": "[$i]",
+    "minCount": 2,
+    "type": "any",
+    "access": "tree"
+  }
+}

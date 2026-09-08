@@ -1,0 +1,58 @@
+{
+  "id": "random_number",
+  "label": "随机数",
+  "name-en": "RandNum",
+  "description": "在指定范围内生成一个随机整数，每次执行结果不同",
+  "description-en": "Generate a single random integer within a specified range; result differs on each run.",
+  "icon": "一个骰子正面显示随机点数，旁边有最小值和最大值标注，扁平插画风格，简洁小图标，主色2种。",
+  "version": "1.0.0",
+  "tags": [
+    "basic",
+    "utility",
+    "number"
+  ],
+  "tag_labels": [
+    "基础",
+    "工具",
+    "数值"
+  ],
+  "inputs": [
+    {
+      "name": "min",
+      "type": "number",
+      "access": "item",
+      "label": "最小值",
+      "default": 0,
+      "description": "随机整数的最小值（含）",
+      "description-en": "Minimum value of the random integer (inclusive)."
+    },
+    {
+      "name": "max",
+      "type": "number",
+      "access": "item",
+      "label": "最大值",
+      "default": 100,
+      "description": "随机整数的最大值（含）",
+      "description-en": "Maximum value of the random integer (inclusive)."
+    },
+    {
+      "name": "seed",
+      "type": "number",
+      "access": "item",
+      "label": "随机种子",
+      "default": 0,
+      "description": "随机种子（整数）；0 表示使用当前时间戳（每次结果不同），非零值产生固定结果",
+      "description-en": "Random seed (integer); 0 uses the current timestamp for a different result each run; any non-zero value produces a fixed output."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "number",
+      "type": "number",
+      "access": "item",
+      "label": "随机数",
+      "description": "生成的随机整数",
+      "description-en": "The generated random integer."
+    }
+  ]
+}

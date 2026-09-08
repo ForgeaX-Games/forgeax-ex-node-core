@@ -1,0 +1,51 @@
+{
+  "id": "list_get_single",
+  "label": "取值",
+  "name-en": "Get",
+  "description": "从一级外层 list 中按单个 index 取出元素。",
+  "description-en": "Get one item from a list by index.",
+  "icon": "一个橙色列表，右侧伸出一条箭头指向高亮的单个元素，箭头旁有数字下标，扁平插画风格，简洁小图标，主色2种。",
+  "version": "1.1.0",
+  "tags": [
+    "list",
+    "index",
+    "get"
+  ],
+  "tag_labels": [
+    "列表",
+    "索引",
+    "取值"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "inputs": [
+    {
+      "name": "list",
+      "type": "any",
+      "access": "list",
+      "label": "列表",
+      "description": "源一级 list",
+      "description-en": "Source list."
+    },
+    {
+      "name": "index",
+      "type": "number",
+      "access": "item",
+      "label": "Index",
+      "default": 0,
+      "description": "元素下标，支持负数",
+      "description-en": "Item index; negative indices are supported."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "item",
+      "type": "any",
+      "access": "item",
+      "label": "元素",
+      "description": "取出的元素",
+      "description-en": "Extracted item."
+    }
+  ]
+}

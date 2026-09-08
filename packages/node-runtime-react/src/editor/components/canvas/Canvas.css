@@ -1,0 +1,379 @@
+/* 💡 主画布区域样式：覆盖并定制 react-flow 的内部组件（如控制按钮、迷你地图、连线颜色等）的视觉体验 */
+/* DOC-05-02 画布样式 */
+.canvas {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: var(--color-bg-primary);
+
+  /* 网格 CSS 变量,由 updateGridVars() 在 pan/zoom 时动态更新 */
+  --grid-size: 24px;
+  --grid-size-major: 120px;
+  --grid-offset-x: 0px;
+  --grid-offset-y: 0px;
+  --grid-line-color: rgba(180, 180, 180, 0.06);
+  --grid-line-color-strong: rgba(200, 200, 200, 0.12);
+}
+
+/* 四层渐变网格:细格竖/横 + 粗格竖/横。
+   ── 性能要点 ──
+   pan/zoom 改 background-size / background-position 触发 paint。但:
+   1. updateGridVars 在 JS 端用 RAF 节流,一帧最多更新一次(节流前是高频滚轮事件
+      直接打过来 → paint 队列堆积 → 丢帧)
+   2. will-change: transform; contain: paint 提示浏览器把这个元素放到独立合成层,
+      paint 后由 GPU 合成,不连累兄弟元素
+   3. background tile 化 → paint 成本只跟 tile 尺寸有关,大画布也便宜 */
+.canvas::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right,  var(--grid-line-color)        1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line-color)        1px, transparent 1px),
+    linear-gradient(to right,  var(--grid-line-color-strong) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line-color-strong) 1px, transparent 1px);
+  background-size:
+    var(--grid-size)       var(--grid-size),
+    var(--grid-size)       var(--grid-size),
+    var(--grid-size-major) var(--grid-size-major),
+    var(--grid-size-major) var(--grid-size-major);
+  background-position:
+    var(--grid-offset-x) var(--grid-offset-y),
+    var(--grid-offset-x) var(--grid-offset-y),
+    var(--grid-offset-x) var(--grid-offset-y),
+    var(--grid-offset-x) var(--grid-offset-y);
+  /* will-change + contain:paint 把网格 paint 隔离到独立合成层,
+     避免 paint 跨整个 canvas 树连锁失效 */
+  will-change: background-size, background-position;
+  contain: paint;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.canvas--group-view {
+  --grid-line-color: rgba(251, 191, 36, 0.08);
+  --grid-line-color-strong: rgba(251, 146, 60, 0.18);
+}
+
+/* 组内视图的外部上下文节点：区别于可编辑的组内真实电池 */
+.react-flow__node.group-context-node {
+  opacity: 0.82;
+  filter: saturate(0.92);
+}
+
+.react-flow__node.group-context-node::after {
+  position: absolute;
+  top: -22px;
+  z-index: 2;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-family: var(--font-family);
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.92);
+  border: 1px solid currentColor;
+  background: rgba(2, 6, 23, 0.82);
+  pointer-events: none;
+}
+
+.react-flow__node.group-context-node--input::after {
+  content: "External Input";
+  left: 0;
+  color: rgba(56, 189, 248, 0.95);
+}
+
+.react-flow__node.group-context-node--output::after {
+  content: "External Output";
+  right: 0;
+  color: rgba(251, 146, 60, 0.95);
+}
+
+.react-flow__node.group-context-node--input .battery-node,
+.react-flow__node.group-context-node--input .group-node {
+  --node-color: #38bdf8;
+  --node-rgb: 56, 189, 248;
+}
+
+.react-flow__node.group-context-node--output .battery-node,
+.react-flow__node.group-context-node--output .group-node {
+  --node-color: #fb923c;
+  --node-rgb: 251, 146, 60;
+}
+
+.react-flow__node.group-context-node .battery-node,
+.react-flow__node.group-context-node .group-node {
+  border-style: dashed;
+}
+
+.react-flow__node.group-context-node--input .relay-node {
+  --relay-color: #38bdf8;
+}
+
+.react-flow__node.group-context-node--output .relay-node {
+  --relay-color: #fb923c;
+}
+
+/* ReactFlow 容器背景透明，让 .canvas::before 网格可见 */
+.react-flow {
+  background-color: transparent !important;
+}
+
+.react-flow__node {
+  cursor: grab;
+}
+
+.react-flow__node *:not(.react-flow__handle):not(svg):not(path) {
+  color: #fff !important;
+}
+
+.react-flow__node:active {
+  cursor: grabbing;
+}
+
+/* 自定义覆盖画布右下角的小地图面板背景与蒙版遮罩 */
+/* margin-bottom 上移为滑条（高26px）+间距(4px)+自身底部留边(4px)=34px 留出空间 */
+.react-flow__minimap {
+  background-color: var(--color-bg-secondary) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: box-shadow var(--transition-fast) !important;
+  margin-bottom: 34px !important;
+  /* 内部 SVG 默认按矩形铺满，需裁剪到圆角范围内，否则节点缩略矩形会盖住四角的圆弧 */
+  overflow: hidden !important;
+}
+
+/* SVG 也加圆角以兼容部分浏览器无法用 overflow:hidden 裁剪 SVG 子元素的渲染差异 */
+.react-flow__minimap svg {
+  border-radius: var(--radius-md) !important;
+}
+
+.react-flow__minimap:hover {
+  box-shadow: var(--shadow-md) !important;
+  border-color: rgba(var(--color-accent-rgb), 0.3) !important;
+}
+
+.react-flow__minimap-mask {
+  fill: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* stroke 颜色由 onConnect 的 edge.style.stroke 动态注入，此处只设默认值（无 !important 避免覆盖 inline style） */
+.react-flow__edge-path {
+  stroke-width: 2;
+  transition: stroke-width var(--transition-fast);
+}
+
+/* ReactFlow renders a wide transparent interaction path inside each edge.
+   Make it explicitly hit-testable so double-clicking a wire reliably inserts
+   the legacy relay node even when the visible stroke is very thin. */
+.react-flow__edge .react-flow__edge-interaction {
+  pointer-events: stroke;
+  cursor: pointer;
+}
+
+/* 选中态：加粗 + 流动虚线动画，stroke 颜色由 inline style 保持原端口颜色 */
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke-width: 3;
+  stroke-dasharray: 8 4;
+  animation: edgeFlow 0.65s linear infinite;
+  filter: drop-shadow(0 0 3px currentColor);
+}
+
+@keyframes edgeFlow {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -24; }
+}
+
+/* 悬停连线：轻微加粗 */
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 2px currentColor);
+}
+
+/* 拖出中的连接预览线：与连线风格一致 */
+.react-flow__connection-path {
+  stroke-width: 2;
+  stroke-dasharray: 6 3;
+  animation: edgeFlow 0.5s linear infinite;
+}
+
+/* ===== 框选方向样式 =====
+   从左往右（ltr）→ 实线边框，需完全框住才选中（SelectionMode.Full）
+   从右往左（rtl）→ 虚线边框，碰到即选中（SelectionMode.Partial）       */
+.canvas[data-selection-dir="ltr"] .react-flow__selection {
+  border: 1.5px solid var(--color-accent) !important;
+  background: rgba(var(--color-accent-rgb), 0.08) !important;
+}
+
+.canvas[data-selection-dir="rtl"] .react-flow__selection {
+  border: 1.5px dashed var(--color-accent) !important;
+  background: rgba(var(--color-accent-rgb), 0.05) !important;
+}
+
+/* Handle 的 background/border/width/height 由 BatteryNode.tsx 的 inline style 动态注入颜色，
+   此处不设 !important，避免覆盖端口类型颜色 */
+.react-flow__handle {
+  width: 10px;
+  height: 10px;
+  z-index: 20;
+  opacity: 1;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* 悬浮时平滑放大 */
+.react-flow__handle:hover {
+  transform: translateY(-50%) scale(1.4);
+  opacity: 1;
+}
+
+/* 端口不应有焦点轮廓（不可被选中） */
+.react-flow__handle:focus,
+.react-flow__handle:focus-visible {
+  outline: none;
+}
+
+/* 连线拖拽中：不显示额外圆圈，保持与 hover 一致的平滑放大 */
+.react-flow__handle.connecting,
+.react-flow__handle.valid {
+  outline: none;
+}
+
+/* ===== 可连接端口脉冲提示动画 =====
+   onConnectStart 通过类型兼容性检查后，精确地给每个兼容 target handle 添加 handle-connectable class。
+   onConnectEnd 清除所有 handle-connectable class。
+   translateY(-50%) 必须保留在每一帧，确保绝对定位的 Handle 垂直居中不跳变。 */
+@keyframes handleConnectable {
+  0% {
+    box-shadow: 0 0 0 0px rgba(var(--color-accent-rgb), 0.65);
+    transform: translateY(-50%) scale(1.0);
+  }
+  60% {
+    box-shadow: 0 0 0 7px rgba(var(--color-accent-rgb), 0);
+    transform: translateY(-50%) scale(1.35);
+  }
+  100% {
+    box-shadow: 0 0 0 0px rgba(var(--color-accent-rgb), 0);
+    transform: translateY(-50%) scale(1.0);
+  }
+}
+
+/* 仅类型兼容的 target handle 播放脉冲动画 */
+.react-flow__handle.handle-connectable {
+  animation: handleConnectable 0.9s ease-out infinite;
+}
+
+/* ===== 对齐吸附辅助线 =====
+   拖拽节点时，当检测到中心 X 对齐或连线水平对齐时短暂显示参考轴线。
+   SVG 覆盖整个画布，pointer-events:none 确保不拦截拖拽操作。 */
+.snap-guide-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+  overflow: visible;
+}
+
+.snap-guide-line {
+  stroke: var(--color-accent);
+  stroke-width: 1;
+  stroke-dasharray: 4 3;
+  opacity: 0.75;
+}
+
+/* ===== 右下角缩放滑条（位于 MiniMap 正下方） =====
+   Panel bottom-right 默认 margin:15px（与 MiniMap 相同），右边自动对齐。
+   MiniMap 底边在 bottom:15px，滑条 margin-bottom 小于 15px 即可放到其下方。
+   4px 让两者紧贴但留极小缝隙。
+*/
+.zoom-slider-panel {
+  pointer-events: all;
+  margin-bottom: 4px;
+}
+
+.zoom-slider-control {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  width: 100px;
+  height: 26px;
+  padding: 3px 6px;
+  box-sizing: border-box;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.zoom-slider-control:hover {
+  box-shadow: var(--shadow-md);
+  border-color: rgba(var(--color-accent-rgb), 0.3);
+}
+
+.zoom-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  line-height: 1;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 3px;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.zoom-btn:hover {
+  color: var(--color-accent);
+  background: var(--color-accent-hover);
+}
+
+.zoom-slider-input {
+  flex: 1;
+  min-width: 0;
+  height: 3px;
+  cursor: pointer;
+  accent-color: var(--color-accent);
+  background: var(--color-border);
+  border-radius: 2px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.zoom-slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.zoom-slider-input::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+}
+
+.zoom-slider-input::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: none;
+  cursor: pointer;
+}
+
+.zoom-label {
+  display: none;
+}

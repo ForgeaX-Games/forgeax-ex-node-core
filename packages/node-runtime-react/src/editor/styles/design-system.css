@@ -1,0 +1,194 @@
+/* 💡 全局样式表：定义 CSS 变量、主题配色方案、基础排版及滚动条样式 */
+:root {
+  /* Forgeax 深绿工作台配色：near-black 基底 + moss-green 面板 + lime 高亮 */
+  --color-bg-primary: #070b08;
+  --color-bg-secondary: #101912;
+  --color-bg-titlebar: #050806;
+  --color-bg-titlebar-gradient: #0b120d;
+  --color-bg-tertiary: #162219;
+  --color-bg-elevated: #1d2b20;
+  --color-text-primary: #f3f7ee;
+  --color-text-secondary: #9aa894;
+  --color-text-muted: #667260;
+  --color-accent: #d4ff48;
+  --color-accent-rgb: 212, 255, 72;
+  --color-accent-contrast: #10170e;
+  --color-accent-hover: rgba(212, 255, 72, 0.14);
+  --color-accent-active: rgba(212, 255, 72, 0.26);
+  --color-border: #263326;
+  --color-border-strong: #3a4b38;
+  --color-success: #3ECF6B;
+  --color-warning: #F59E0B;
+  --color-error: #F04E52;
+  --color-info: #38BDF8;
+
+  /* 字体 */
+  --font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', 'Inter', system-ui, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+
+  /* 圆角 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* DOC-05-02 2.2 布局尺寸 */
+  --titlebar-height: 32px;
+  --statusbar-height: 24px;
+  --batterybar-width: 240px;
+  --batterybar-collapsed-width: 48px;
+  --sidebar-width: 300px;
+
+  /* 过渡动画 */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 阴影 */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.45);
+  --shadow-accent: 0 0 0 2px rgba(212, 255, 72, 0.32);
+  --shadow-accent-glow: 0 0 14px rgba(212, 255, 72, 0.36);
+}
+
+/* 浅色主题：通过 data-theme="light" 属性覆盖全局 CSS 变量 */
+[data-theme="light"] {
+  --color-bg-primary: #f1f5e9;
+  --color-bg-secondary: #e3ead8;
+  --color-bg-titlebar: #d8e3c9;
+  --color-bg-titlebar-gradient: #ccdabb;
+  --color-bg-tertiary: #edf3e3;
+  --color-bg-elevated: #fbfff2;
+  --color-text-primary: #17210f;
+  --color-text-secondary: #55624b;
+  --color-text-muted: #7c8970;
+  --color-accent: #8fbf1f;
+  --color-accent-rgb: 143, 191, 31;
+  --color-accent-contrast: #10170e;
+  --color-accent-hover: rgba(143, 191, 31, 0.14);
+  --color-accent-active: rgba(143, 191, 31, 0.25);
+  --color-border: #c3ceb5;
+  --color-border-strong: #9aaa88;
+  --color-success: #2DB85A;
+  --color-warning: #D97706;
+  --color-error: #DC3545;
+  --color-info: #0EA5E9;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --shadow-accent: 0 0 0 2px rgba(143, 191, 31, 0.28);
+  --shadow-accent-glow: 0 0 12px rgba(143, 191, 31, 0.24);
+}
+
+/* 减少动效：用户偏好无动画时，禁用所有过渡和动画 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* 让所有元素的宽高计算包含 padding 和 border */
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* 防止出现外层滚动条，把滚动区域下放到特定组件 */
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  -webkit-font-smoothing: antialiased; /* 在 Mac/iOS 上让字体渲染得更平滑 */
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 自定义整体的 Webkit 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-secondary);
+}
+
+button {
+  font-family: inherit; /* 让按钮继承上层的字体家族 */
+}
+
+/* ── 全局 select 深色定制 ── */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--color-bg-tertiary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237878A0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 10px 7px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  padding: 4px 28px 4px 8px;
+  font-size: var(--font-size-sm);
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+select:hover {
+  border-color: var(--color-border-strong);
+}
+
+select:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(var(--color-accent-rgb), 0.2);
+}
+
+select option {
+  background-color: var(--color-bg-elevated);
+  color: var(--color-text-primary);
+}
+
+/* ── 全局 input 统一焦点环 ── */
+input:focus,
+textarea:focus {
+  outline: none;
+}
+
+/* ── 通用弹窗/浮层基础类（下拉列表、Tooltip 等共用） ── */
+.popup-panel {
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}

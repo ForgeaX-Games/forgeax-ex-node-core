@@ -1,0 +1,43 @@
+/* ProjectPanel — inline (non-modal) project manager for the left side pane.
+   Card / button / wizard visuals are shared with ProjectsDialog.css (imported
+   via projectViews); this file only owns the panel container + list layout. */
+
+.proj-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.proj-panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.proj-panel__head h2 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+
+.proj-panel__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* The shared ProjectCard is a horizontal card in the modal grid; in the narrow
+   left pane it should fill the column. */
+.proj-panel__list .proj-card {
+  width: 100%;
+}
+
+/* "Held by agent" badge — distinct from the blue "active" badge. */
+.proj-card__badge--lock {
+  background: #b45309;
+  color: #fff;
+}

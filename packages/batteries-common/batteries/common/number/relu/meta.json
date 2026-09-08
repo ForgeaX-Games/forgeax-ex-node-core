@@ -1,0 +1,43 @@
+{
+  "id": "relu",
+  "label": "ReLU",
+  "name-en": "ReLU",
+  "description": "ReLU 截断：输入大于 0 时原样输出，否则输出 0。支持 Shape/Rank 自动批处理",
+  "description-en": "ReLU clamp: outputs the input if positive, otherwise 0. Supports Shape/Rank auto-iteration.",
+  "icon": "一条折线从左下角水平延伸到中心后向右上方倾斜上升，ReLU函数图形，扁平几何风格，简洁小图标，主色红灰两色",
+  "version": "1.2.0",
+  "lacing": "longest",
+  "tags": [
+    "number",
+    "math",
+    "relu",
+    "clamp"
+  ],
+  "tag_labels": [
+    "数值",
+    "数学",
+    "ReLU",
+    "截断"
+  ],
+  "inputs": [
+    {
+      "name": "value",
+      "type": "number",
+      "access": "item",
+      "label": "数值",
+      "default": 0,
+      "description": "输入数值",
+      "description-en": "Input number."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "number",
+      "access": "item",
+      "label": "结果",
+      "description": "max(0, x) 的结果",
+      "description-en": "Result of max(0, x)."
+    }
+  ]
+}

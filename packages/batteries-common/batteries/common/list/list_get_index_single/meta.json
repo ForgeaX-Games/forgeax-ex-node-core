@@ -1,0 +1,50 @@
+{
+  "id": "list_get_index_single",
+  "label": "查位",
+  "name-en": "Find",
+  "description": "在一级外层 list 中查找元素首次出现的 index。",
+  "description-en": "Find the first index of an item in a list.",
+  "icon": "一个橙色列表，左侧一条箭头由高亮元素指向数字下标标签，体现反向查找，扁平插画风格，简洁小图标，主色2种。",
+  "version": "1.1.0",
+  "tags": [
+    "list",
+    "index",
+    "find"
+  ],
+  "tag_labels": [
+    "列表",
+    "索引",
+    "查找"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "inputs": [
+    {
+      "name": "list",
+      "type": "any",
+      "access": "list",
+      "label": "列表",
+      "description": "源一级 list",
+      "description-en": "Source list."
+    },
+    {
+      "name": "item",
+      "type": "any",
+      "access": "item",
+      "label": "元素",
+      "description": "要查找的元素",
+      "description-en": "Item to find."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "index",
+      "type": "number",
+      "access": "item",
+      "label": "Index",
+      "description": "首次匹配下标，未找到为 -1",
+      "description-en": "First matched index; -1 if not found."
+    }
+  ]
+}

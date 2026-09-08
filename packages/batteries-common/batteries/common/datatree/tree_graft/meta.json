@@ -1,0 +1,42 @@
+{
+  "id": "tree_graft",
+  "label": "Graft",
+  "name-en": "Graft",
+  "description": "把每个 branch 的每个 item 升一层为独立 branch（{A}=[a,b,c] → {A;0}=[a],{A;1}=[b],{A;2}=[c]）。空 branch 被丢弃。",
+  "description-en": "Promote every item in every branch into its own sub-branch ({A}=[a,b,c] → {A;0}=[a],{A;1}=[b],{A;2}=[c]). Empty branches are dropped.",
+  "icon": "一棵浅蓝色的层级树图标，左侧根 branch 中三个圆点向右展开为三条独立子 branch，扁平插画风格，主色2种。",
+  "version": "1.0.0",
+  "tags": [
+    "datatree",
+    "operator",
+    "graft"
+  ],
+  "tag_labels": [
+    "数据树",
+    "算子",
+    "graft"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "inputs": [
+    {
+      "name": "tree",
+      "type": "any",
+      "access": "tree",
+      "label": "树",
+      "description": "源 DataTree",
+      "description-en": "Source DataTree."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "tree",
+      "type": "any",
+      "access": "tree",
+      "label": "树",
+      "description": "graft 后的 DataTree",
+      "description-en": "Grafted DataTree."
+    }
+  ]
+}

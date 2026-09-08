@@ -1,0 +1,46 @@
+/* Side-pane container for the relocated gear-menu controls. Neutral, themeable
+   styling; the host's side-pane stylesheet may further theme `.editor-controls
+   *` sections via the surrounding layout. */
+.editor-controls-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.editor-controls__section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.editor-controls__title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  color: var(--color-text, #e5e7eb);
+}
+
+.editor-controls__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.editor-controls__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--color-text, #e5e7eb);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-border, #2a2e36);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.editor-controls__btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}

@@ -1,0 +1,79 @@
+/* 画布注释节点——无底色，文字直接浮于画布 */
+.annotation-node {
+  position: relative;
+  min-width: 80px;
+  min-height: 32px;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: 1.5px solid transparent;
+  border-radius: 3px;
+  padding: 4px 6px;
+  box-sizing: border-box;
+  cursor: grab;
+  transition: border-color 0.12s;
+}
+
+/* 选中态：虚线边框给予视觉选中反馈 */
+.annotation-node--selected {
+  border: 1.5px dashed rgba(255, 255, 255, 0.45);
+}
+
+/* 编辑态：光标变文字输入形，边框更明显 */
+.annotation-node--editing {
+  cursor: text;
+  border: 1.5px dashed rgba(255, 255, 255, 0.7);
+}
+
+/* 文字显示区 */
+.annotation-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 26px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  user-select: none;
+  min-height: 32px;
+}
+
+.annotation-placeholder {
+  color: rgba(255, 255, 255, 0.2);
+  font-style: italic;
+  font-size: 20px;
+}
+
+/* 编辑态 textarea */
+.annotation-textarea {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 40px;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  color: #ffffff;
+  font-size: 26px;
+  line-height: 1.6;
+  font-family: inherit;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  caret-color: #ffffff;
+}
+
+.annotation-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* NodeResizer 手柄样式 */
+.annotation-resizer-line {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.annotation-resizer-handle {
+  background: rgba(255, 255, 255, 0.55) !important;
+  border-color: rgba(255, 255, 255, 0.65) !important;
+  width: 7px !important;
+  height: 7px !important;
+}

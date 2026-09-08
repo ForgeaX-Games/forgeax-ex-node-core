@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Tree graft battery">
+  <rect x="2.5" y="2.5" width="19" height="19" rx="5" fill="#10211d" stroke="#4f6f63" stroke-width="1.2"/>
+  <path d="M8 7v10M8 10h4M8 14h4M12 10l4-2M12 14l4 2" fill="none" stroke="#95aa9f" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="8" cy="7" r="1.45" fill="#b7ff5a"/>
+  <circle cx="8" cy="17" r="1.45" fill="#e7f5ee"/>
+  <circle cx="16" cy="8" r="1.45" fill="#e7f5ee"/>
+  <circle cx="16" cy="16" r="1.45" fill="#e7f5ee"/>
+</svg>

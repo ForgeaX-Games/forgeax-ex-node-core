@@ -1,0 +1,77 @@
+{
+  "id": "list_unpack",
+  "label": "拆包",
+  "name-en": "Unpack",
+  "description": "遍历一级外层 list 的入口节点；配合 Collect 收集结果。",
+  "description-en": "Loop entry for iterating a outer list; use with Collect to gather results.",
+  "icon": "一个列表左侧有一个橙色指针指向某一行并高亮提取出该元素，右侧展示单个元素框，扁平插画风格，主色橙与深蓝，背景透明简洁",
+  "version": "1.1.0",
+  "tags": [
+    "list",
+    "loop",
+    "unpack"
+  ],
+  "tag_labels": [
+    "列表",
+    "循环",
+    "拆包"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "engineBehavior": "loopUnpack",
+  "inputs": [
+    {
+      "name": "dataList",
+      "type": "any",
+      "access": "list",
+      "label": "列表",
+      "description": "待遍历的一级外层 list",
+      "description-en": "Rank-1 outer list to iterate."
+    },
+    {
+      "name": "trigger",
+      "type": "boolean",
+      "access": "item",
+      "label": "启动",
+      "default": false,
+      "description": "true 时启动循环",
+      "description-en": "Start loop when true."
+    },
+    {
+      "name": "collectorId",
+      "type": "string",
+      "access": "item",
+      "label": "收集ID",
+      "default": "default",
+      "description": "与 Collect 的 collectorId 匹配",
+      "description-en": "Matches Collect collectorId."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "item",
+      "type": "any",
+      "access": "item",
+      "label": "元素",
+      "description": "当前元素",
+      "description-en": "Current item."
+    },
+    {
+      "name": "total",
+      "type": "number",
+      "access": "item",
+      "label": "总数",
+      "description": "list 总元素数量",
+      "description-en": "Total item count."
+    },
+    {
+      "name": "index",
+      "type": "number",
+      "access": "item",
+      "label": "下标",
+      "description": "当前下标",
+      "description-en": "Current index."
+    }
+  ]
+}

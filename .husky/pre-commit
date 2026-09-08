@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+# Runs hygiene + lint before every commit.
+# Bypass with `git commit --no-verify` only in emergencies.
+
+set -e
+
+node scripts/hygiene-check.mjs
+pnpm lint

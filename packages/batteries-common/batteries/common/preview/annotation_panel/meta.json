@@ -1,0 +1,24 @@
+{
+  "id": "annotation_panel",
+  "label": "注释",
+  "name-en": "Annotation",
+  "description": "拖入画布后创建一段可编辑、可拖动的自由文本注释，不参与管线执行",
+  "description-en": "Create an editable free-text annotation on the canvas; annotations do not participate in pipeline execution.",
+  "icon": "一张半透明便签纸，上面有几行手写注释文字，扁平插画风格，适合做电池图标，小尺寸可辨、背景简洁、主色一至两种。",
+  "version": "1.0.0",
+  "tags": [
+    "preview",
+    "annotation",
+    "note"
+  ],
+  "tag_labels": [
+    "预览",
+    "注释",
+    "便签"
+  ],
+  "frontend": {
+    "nodeType": "annotation"
+  },
+  "inputs": [],
+  "outputs": []
+}

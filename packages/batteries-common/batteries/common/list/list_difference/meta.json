@@ -1,0 +1,50 @@
+{
+  "id": "list_difference",
+  "label": "差集",
+  "name-en": "Diff",
+  "description": "从基准一级 list 中减去子 list，返回剩余元素，保留原始顺序。",
+  "description-en": "Subtract a sub-list from a base list and preserve original order.",
+  "icon": "两个水平列表条，右侧列表从左侧列表中被划去部分元素，剩余元素高亮显示，扁平插画风格，简洁小图标，主色2种。",
+  "version": "1.1.0",
+  "tags": [
+    "list",
+    "difference",
+    "filter"
+  ],
+  "tag_labels": [
+    "列表",
+    "差集",
+    "过滤"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "inputs": [
+    {
+      "name": "baseList",
+      "type": "any",
+      "access": "list",
+      "label": "基准",
+      "description": "基准一级 list",
+      "description-en": "Base list."
+    },
+    {
+      "name": "subList",
+      "type": "any",
+      "access": "list",
+      "label": "子集",
+      "description": "要减去的一级 list",
+      "description-en": "Rank-1 list to subtract."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "diffList",
+      "type": "any",
+      "access": "list",
+      "label": "差集",
+      "description": "差集结果 list",
+      "description-en": "Difference result list."
+    }
+  ]
+}

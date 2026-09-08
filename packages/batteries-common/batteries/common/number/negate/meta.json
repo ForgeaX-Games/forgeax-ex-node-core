@@ -1,0 +1,43 @@
+{
+  "id": "negate",
+  "label": "取负",
+  "name-en": "Neg",
+  "description": "对输入数值取负（x -> -x）。支持 Shape/Rank 自动批处理",
+  "description-en": "Negate a number (x -> -x). Supports Shape/Rank auto-iteration.",
+  "icon": "一个减号和翻转箭头，表示正负取反，扁平几何风格，简洁小图标，主色紫灰两色",
+  "version": "1.1.0",
+  "lacing": "longest",
+  "tags": [
+    "number",
+    "math",
+    "negate",
+    "invert"
+  ],
+  "tag_labels": [
+    "数值",
+    "数学",
+    "取负",
+    "反转"
+  ],
+  "inputs": [
+    {
+      "name": "value",
+      "type": "number",
+      "access": "item",
+      "label": "数值",
+      "default": 0,
+      "description": "输入数值",
+      "description-en": "Input number."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "number",
+      "access": "item",
+      "label": "结果",
+      "description": "-x 的结果",
+      "description-en": "Result of -x."
+    }
+  ]
+}

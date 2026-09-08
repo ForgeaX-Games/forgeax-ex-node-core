@@ -1,0 +1,42 @@
+{
+  "id": "tree_flatten",
+  "label": "Flatten",
+  "name-en": "Flatten",
+  "description": "把所有 branch 顺序拍到 path=[0]。空树仍为空树。",
+  "description-en": "Flatten all branches sequentially into a single branch at path=[0]. Empty tree stays empty.",
+  "icon": "一棵层级树图标，左侧多 branch 向右汇聚到一条扁平 list，扁平插画风格，主色2种。",
+  "version": "1.0.0",
+  "tags": [
+    "datatree",
+    "operator",
+    "flatten"
+  ],
+  "tag_labels": [
+    "数据树",
+    "算子",
+    "flatten"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "inputs": [
+    {
+      "name": "tree",
+      "type": "any",
+      "access": "tree",
+      "label": "树",
+      "description": "源 DataTree",
+      "description-en": "Source DataTree."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "tree",
+      "type": "any",
+      "access": "tree",
+      "label": "树",
+      "description": "flatten 后的 DataTree",
+      "description-en": "Flattened DataTree."
+    }
+  ]
+}

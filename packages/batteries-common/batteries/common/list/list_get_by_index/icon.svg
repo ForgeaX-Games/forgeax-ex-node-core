@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="List get many battery">
+  <rect x="2.5" y="2.5" width="19" height="19" rx="5" fill="#10211d" stroke="#4f6f63" stroke-width="1.2"/>
+  <path d="M7 7h8M7 12h8M7 17h8" fill="none" stroke="#95aa9f" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M16 5.5l2 1.5-2 1.5M16 10.5l2 1.5-2 1.5M16 15.5l2 1.5-2 1.5" fill="none" stroke="#b7ff5a" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="8" cy="7" r="1.15" fill="#b7ff5a"/>
+  <circle cx="8" cy="12" r="1.15" fill="#b7ff5a"/>
+  <circle cx="8" cy="17" r="1.15" fill="#b7ff5a"/>
+</svg>

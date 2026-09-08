@@ -1,0 +1,70 @@
+{
+  "id": "basic_math_op",
+  "label": "数学",
+  "name-en": "Math",
+  "description": "对两个数字执行基础数学运算：加、减、乘、除、幂、取余、绝对值",
+  "description-en": "Perform basic math operations on two numbers: add, subtract, multiply, divide, power, modulo, absolute value.",
+  "icon": "两个数字中间有加减乘除运算符号，扁平插画风格，简洁小图标，主色2种。",
+  "version": "1.0.0",
+  "lacing": "longest",
+  "tags": [
+    "basic",
+    "utility",
+    "number",
+    "math"
+  ],
+  "tag_labels": [
+    "基础",
+    "工具",
+    "数值",
+    "数学"
+  ],
+  "inputs": [
+    {
+      "name": "a",
+      "type": "number",
+      "access": "item",
+      "label": "数字 A",
+      "default": 0,
+      "description": "第一个操作数（abs 运算时仅使用此值）",
+      "description-en": "First operand (abs operation uses only this value)."
+    },
+    {
+      "name": "b",
+      "type": "number",
+      "access": "item",
+      "label": "数字 B",
+      "default": 1,
+      "description": "第二个操作数（abs 运算时忽略）",
+      "description-en": "Second operand (ignored for abs operation)."
+    },
+    {
+      "name": "op",
+      "type": "string",
+      "access": "tree",
+      "label": "运算",
+      "default": "+",
+      "description": "选择要执行的运算",
+      "description-en": "Select the operation to perform.",
+      "options": [
+        "+",
+        "-",
+        "*",
+        "/",
+        "^",
+        "%",
+        "abs"
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "number",
+      "access": "item",
+      "label": "结果",
+      "description": "运算结果",
+      "description-en": "Computation result."
+    }
+  ]
+}

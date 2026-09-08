@@ -1,0 +1,40 @@
+{
+  "id": "list_get_length",
+  "label": "长度",
+  "name-en": "Length",
+  "description": "读取一级外层 list 的元素数量。List 不是基础类型，这里表示最外层 shape。",
+  "description-en": "Return the element count of the outer list. List is not a base type; it means the outer list layer here.",
+  "icon": "一个方括号包裹的短列表，右侧标注数字表示长度，扁平插画风格，简洁小图标，主色2种。",
+  "version": "1.1.0",
+  "tags": [
+    "list",
+    "length"
+  ],
+  "tag_labels": [
+    "列表",
+    "长度"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "inputs": [
+    {
+      "name": "list",
+      "type": "any",
+      "access": "list",
+      "label": "列表",
+      "description": "一级外层 list",
+      "description-en": "Rank-1 outer list."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "length",
+      "type": "number",
+      "access": "item",
+      "label": "长度",
+      "description": "元素数量",
+      "description-en": "Element count."
+    }
+  ]
+}

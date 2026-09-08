@@ -1,0 +1,7 @@
+{
+  "kernel": {
+    "execute.started": "Pipeline {pipelineId} started",
+    "execute.completed": "Pipeline {pipelineId} completed in {duration}ms",
+    "execute.aborted": "Pipeline {pipelineId} aborted"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "id": "toggle",
+  "label": "布尔",
+  "name-en": "Toggle",
+  "description": "输出一个布尔常量值（开/关），通过节点切换",
+  "description-en": "Output a boolean constant (on/off) toggled on the node.",
+  "icon": "一个开关或拨杆特写，或灯泡亮与灭的对比，扁平插画风格，适合做电池图标，小尺寸可辨、背景简洁、主色一至两种。",
+  "version": "1.0.0",
+  "tags": [
+    "input",
+    "value",
+    "bool"
+  ],
+  "tag_labels": [
+    "输入",
+    "值",
+    "布尔"
+  ],
+  "frontend": {
+    "nodeType": "toggle"
+  },
+  "inputs": [],
+  "outputs": [
+    {
+      "name": "value",
+      "type": "bool",
+      "access": "item",
+      "label": "值",
+      "description": "当前开关状态（true/false）",
+      "description-en": "Current toggle state (true/false)."
+    }
+  ]
+}

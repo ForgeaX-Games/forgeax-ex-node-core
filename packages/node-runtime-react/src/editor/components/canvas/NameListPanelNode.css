@@ -1,0 +1,118 @@
+/* 💡 NameListPanel 节点样式：蓝紫调，仿 TextPanel 布局，支持自动宽度和手动缩放 */
+
+.nlp-node {
+  --node-color: #9999ee;
+  --node-rgb: 153, 153, 238;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(var(--node-rgb), 0.15);
+  border: 1px solid var(--node-color);
+  border-radius: 5px;
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.72),
+              0 0 0 1px rgba(var(--node-rgb), 0.22),
+              0 0 16px rgba(var(--node-rgb), 0.26),
+              0 0 30px rgba(var(--node-rgb), 0.1);
+  outline: 2px solid transparent;
+  outline-offset: 0;
+  overflow: hidden;
+  opacity: 0.88;
+  transition: background var(--transition-fast), border-color var(--transition-fast), outline-color var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
+}
+
+.nlp-node:hover {
+  background: rgba(var(--node-rgb), 0.18);
+  border-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.82),
+              0 0 0 1px rgba(var(--node-rgb), 0.3),
+              0 0 18px rgba(var(--node-rgb), 0.34),
+              0 0 34px rgba(var(--node-rgb), 0.14);
+}
+
+.nlp-node.selected {
+  background: rgba(var(--node-rgb), 0.24);
+  border-color: var(--node-color);
+  outline-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 2px rgba(var(--node-rgb), 0.98),
+              0 0 0 2px rgba(var(--node-rgb), 0.42),
+              0 0 20px rgba(var(--node-rgb), 0.58),
+              0 0 42px rgba(var(--node-rgb), 0.24);
+}
+
+/* ===== 标题栏 ===== */
+.nlp-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 3px 6px 3px 10px;
+  background: rgba(var(--node-rgb), 0.12);
+  border-bottom: 1px solid rgba(var(--node-rgb), 0.22);
+  cursor: grab;
+  user-select: none;
+  min-height: 22px;
+}
+
+.nlp-node:active .nlp-header {
+  cursor: grabbing;
+}
+
+.nlp-title {
+  flex: 1;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(var(--node-rgb), 0.92);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== 主体区 ===== */
+.nlp-body {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.nlp-content {
+  width: 100%;
+  height: 100%;
+  padding: 6px 10px;
+  color: var(--color-text-primary);
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  overflow: auto;
+  cursor: default;
+  box-sizing: border-box;
+}
+
+.nlp-line {
+  display: block;
+  white-space: nowrap;
+}
+
+.nlp-placeholder {
+  color: #4a4a8a;
+  font-style: italic;
+}
+
+/* ===== NodeResizer ===== */
+.nlp-resize-line {
+  border-color: var(--node-color) !important;
+  border-style: dashed !important;
+  border-width: 1px !important;
+}
+
+.nlp-resize-handle {
+  width: 7px !important;
+  height: 7px !important;
+  background: var(--node-color) !important;
+  border: 1px solid rgba(var(--node-rgb), 0.22) !important;
+  border-radius: 2px !important;
+}

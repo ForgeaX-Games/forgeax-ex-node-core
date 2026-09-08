@@ -1,0 +1,43 @@
+{
+  "id": "text_panel",
+  "label": "文本面板",
+  "name-en": "Panel",
+  "description": "文本面板，接受任意输入或自由编辑，输出字符串",
+  "description-en": "Text panel: accept any input or free edit, output as string.",
+  "icon": "一块写满字的便签或白板特写，带手写感线条，扁平插画风格，适合做电池图标，小尺寸可辨、背景简洁、主色一至两种。",
+  "version": "1.0.0",
+  "tags": [
+    "input",
+    "utility",
+    "text"
+  ],
+  "tag_labels": [
+    "输入",
+    "工具",
+    "文本"
+  ],
+  "frontend": {
+    "nodeType": "text_panel"
+  },
+  "inputs": [
+    {
+      "name": "input",
+      "type": "any",
+      "access": "item",
+      "label": "输入",
+      "description": "任意类型的输入值，有连接时覆盖面板内容",
+      "description-en": "Optional upstream value; when connected, overrides panel content.",
+      "default": null
+    }
+  ],
+  "outputs": [
+    {
+      "name": "output",
+      "type": "string",
+      "access": "item",
+      "label": "输出",
+      "description": "面板中的文本内容（有上游连接时为上游值转字符串）",
+      "description-en": "Panel text content, or string from upstream if connected."
+    }
+  ]
+}

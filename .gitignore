@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+**/node_modules/
+.pnpm-store/
+.npm
+.eslintcache
+
+# Build outputs
+dist/
+**/dist/
+build/
+**/build/
+*.tsbuildinfo
+
+# Test artifacts
+coverage/
+.nyc_output/
+**/node-compile-cache/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+*.local
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+Thumbs.db
+
+# Runtime
+logs/
+*.log

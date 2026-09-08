@@ -1,0 +1,343 @@
+/* 💡 成组节点样式：折叠后的合成节点，青绿色调，与普通电池节点视觉区分 */
+
+/* 重置 ReactFlow 给 group 类型节点外层容器加的默认样式（灰色背景/padding/border） */
+.react-flow__node-group {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.group-node {
+  --node-color: #14b8a6;
+  --node-rgb: 20, 184, 166;
+  width: 100%;
+  min-width: 200px;
+  background-color: rgba(var(--node-rgb), 0.15);
+  border: 1px solid var(--node-color);   /* 青绿色边框 */
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.72),
+              0 0 0 1px rgba(var(--node-rgb), 0.22),
+              0 0 16px rgba(var(--node-rgb), 0.26),
+              0 0 30px rgba(var(--node-rgb), 0.1);
+  outline: 2px solid transparent;
+  outline-offset: 0;
+  opacity: 0.92;
+  transition: background-color var(--transition-fast),
+              border-color var(--transition-fast),
+              outline-color var(--transition-fast),
+              box-shadow var(--transition-fast),
+              opacity var(--transition-fast);
+}
+
+.group-node:hover {
+  background-color: rgba(var(--node-rgb), 0.18);
+  border-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.82),
+              0 0 0 1px rgba(var(--node-rgb), 0.3),
+              0 0 18px rgba(var(--node-rgb), 0.34),
+              0 0 34px rgba(var(--node-rgb), 0.14);
+}
+
+.group-node.selected {
+  background-color: rgba(var(--node-rgb), 0.24);
+  border-color: var(--node-color);
+  outline-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 2px rgba(var(--node-rgb), 0.98),
+              0 0 0 2px rgba(var(--node-rgb), 0.42),
+              0 0 20px rgba(var(--node-rgb), 0.58),
+              0 0 42px rgba(var(--node-rgb), 0.24);
+}
+
+/* ── 头部 ─────────────────────────────────────────────────────────────────── */
+.group-node__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 6px 5px 8px;
+  background: linear-gradient(135deg, rgba(var(--node-rgb), 0.18), rgba(var(--node-rgb), 0.08));
+  border-bottom: 1px solid rgba(var(--node-rgb), 0.22);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  cursor: grab;
+  min-width: 0;
+}
+
+.group-node:active .group-node__header {
+  cursor: grabbing;
+}
+
+.group-node__name {
+  flex: 1 1 0;
+  text-align: left;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: rgba(var(--node-rgb), 0.95);
+  line-height: 1.22;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: grab;
+  min-width: 0;
+}
+
+.group-node__name-input {
+  flex: 1;
+  background: rgba(var(--node-rgb), 0.1);
+  border: 1px solid rgba(var(--node-rgb), 0.5);
+  border-radius: 3px;
+  color: rgba(var(--node-rgb), 0.95);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  padding: 1px 4px;
+  outline: none;
+  min-width: 0;
+}
+
+/* ── 操作按钮组（右侧 flex 行） ─────────────────────────────────────────── */
+.group-node__actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+/* 通用按钮基底 */
+.group-node__action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background var(--transition-fast),
+              border-color var(--transition-fast),
+              color var(--transition-fast);
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.group-node__action-btn svg {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+/* 保存按钮 — 青绿色 */
+.group-node__action-btn--save {
+  color: rgba(20, 184, 166, 0.6);
+  border-color: rgba(20, 184, 166, 0.25);
+}
+
+.group-node__action-btn--save:hover {
+  background: rgba(20, 184, 166, 0.18);
+  border-color: rgba(20, 184, 166, 0.65);
+  color: rgba(20, 184, 166, 1);
+}
+
+/* 进入按钮 — 琥珀色 */
+.group-node__action-btn--enter {
+  color: rgba(251, 191, 36, 0.6);
+  border-color: rgba(251, 191, 36, 0.25);
+}
+
+.group-node__action-btn--enter:hover {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.65);
+  color: rgba(251, 191, 36, 1);
+}
+
+/* 展开按钮 — 青绿偏淡 */
+.group-node__action-btn--ungroup {
+  color: rgba(94, 234, 212, 0.55);
+  border-color: rgba(94, 234, 212, 0.2);
+}
+
+.group-node__action-btn--ungroup:hover {
+  background: rgba(94, 234, 212, 0.12);
+  border-color: rgba(94, 234, 212, 0.6);
+  color: rgba(94, 234, 212, 1);
+}
+
+.group-node__action-btn--restore {
+  color: rgba(125, 211, 252, 0.58);
+  border-color: rgba(125, 211, 252, 0.22);
+}
+
+.group-node__action-btn--restore:hover:not(:disabled) {
+  background: rgba(125, 211, 252, 0.13);
+  border-color: rgba(125, 211, 252, 0.62);
+  color: rgba(125, 211, 252, 1);
+}
+
+.group-node__action-btn:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+}
+
+/* ── 端口区域 ──────────────────────────────────────────────────────────────── */
+.group-node__ports {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: var(--spacing-sm) 0;
+  min-height: 40px;
+}
+
+.group-node__inputs,
+.group-node__outputs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  min-width: 0;
+}
+
+.group-node__port {
+  display: grid;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  line-height: 1.2;
+  min-width: 0;
+  cursor: default;
+}
+
+.group-node__port--input {
+  position: relative;
+  grid-template-columns: minmax(0, 1fr) auto 16px;
+  padding: 3px var(--spacing-sm) 3px var(--spacing-md);
+  text-align: left;
+}
+
+.group-node__port--output {
+  position: relative;
+  grid-template-columns: 16px minmax(0, 1fr);
+  padding: 3px var(--spacing-md) 3px var(--spacing-sm);
+  text-align: right;
+}
+
+.group-node__port-label {
+  font-size: var(--font-size-xs);
+  line-height: 1.2;
+  min-width: 0;
+  white-space: nowrap;
+  cursor: grab;
+}
+
+.group-node__port--input .group-node__port-label {
+  text-align: left;
+}
+
+.group-node__port-label:active {
+  cursor: grabbing;
+}
+
+.group-node__port--output .group-node__port-label {
+  text-align: right;
+}
+
+.group-node__port-label-input {
+  min-width: 0;
+  width: 100%;
+  height: 16px;
+  padding: 0 4px;
+  border: 1px solid rgba(20, 184, 166, 0.42);
+  border-radius: 4px;
+  background: rgba(2, 6, 23, 0.82);
+  color: rgba(226, 232, 240, 0.95);
+  font-size: var(--font-size-xs);
+  font-family: inherit;
+}
+
+.group-node__port-hide {
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 4px;
+  background: rgba(15, 23, 42, 0.75);
+  color: rgba(226, 232, 240, 0.5);
+  font-size: 11px;
+  line-height: 1;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.group-node__port--input .group-node__port-hide {
+  grid-column: 3;
+}
+
+.group-node__port--output .group-node__port-hide {
+  grid-column: 1;
+}
+
+.group-node__port:hover .group-node__port-hide {
+  opacity: 1;
+}
+
+.group-node__port-hide:hover {
+  color: #fbbf24;
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+.group-node__port-hide:disabled {
+  color: rgba(148, 163, 184, 0.28);
+  border-color: rgba(148, 163, 184, 0.12);
+  cursor: not-allowed;
+}
+
+.group-node__port-hide:disabled:hover {
+  color: rgba(148, 163, 184, 0.28);
+  border-color: rgba(148, 163, 184, 0.12);
+}
+
+/* Handle 定位：输入端口贴左侧，输出端口贴右侧 */
+.group-node__port--input .react-flow__handle {
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.group-node__port--output .react-flow__handle {
+  right: -5px;
+  left: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.react-flow__handle:hover {
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* ── 预览关闭状态 ──────────────────────────────────────────────────────────── */
+.group-node.preview-disabled {
+  opacity: 0.52;
+}
+
+.group-node.preview-disabled .group-node__header {
+  background: rgba(20, 20, 32, 0.95);
+}
+
+/* ── 底部标签 ──────────────────────────────────────────────────────────────── */
+.group-node__footer {
+  padding: 3px var(--spacing-sm) 5px;
+  border-top: 1px solid rgba(20, 184, 166, 0.1);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.group-node__count-badge {
+  font-size: 10px;
+  color: rgba(20, 184, 166, 0.5);
+  letter-spacing: 0.02em;
+}

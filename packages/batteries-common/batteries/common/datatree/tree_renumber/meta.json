@@ -1,0 +1,42 @@
+{
+  "id": "tree_renumber",
+  "label": "Renumber",
+  "name-en": "Renumber",
+  "description": "保 sibling 顺序的前提下，把每层 path 段稠密化为 0..N（消除 trim/shift/合并后留下的 hole）。",
+  "description-en": "Densify path segments at every depth to 0..N while preserving sibling order (eliminate holes left by trim/shift/merge).",
+  "icon": "一棵层级树图标，原本带空号的 branch 被重新编号为 0,1,2 连续序列，扁平插画风格，主色2种。",
+  "version": "1.0.0",
+  "tags": [
+    "datatree",
+    "operator",
+    "renumber"
+  ],
+  "tag_labels": [
+    "数据树",
+    "算子",
+    "renumber"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "inputs": [
+    {
+      "name": "tree",
+      "type": "any",
+      "access": "tree",
+      "label": "树",
+      "description": "源 DataTree",
+      "description-en": "Source DataTree."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "tree",
+      "type": "any",
+      "access": "tree",
+      "label": "树",
+      "description": "renumber 后的 DataTree",
+      "description-en": "Renumbered DataTree."
+    }
+  ]
+}

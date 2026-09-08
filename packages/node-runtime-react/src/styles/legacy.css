@@ -1,0 +1,507 @@
+/* @forgeax/node-runtime-react/styles.css
+ *
+ * Optional legacy visual chrome. Mirrors the values in the
+ * `legacyTheme` token bundle (../themes/index.ts) as CSS custom
+ * properties so consumers can override at the cascade layer rather
+ * than via a TypeScript object.
+ *
+ * Usage — one-line legacy parity at the consumer's entry point:
+ *
+ *   import '@forgeax/node-runtime-react/styles.css'
+ *
+ * Override individual tokens by redefining the CSS custom
+ * properties in your own stylesheet (loaded later in the cascade):
+ *
+ *   :root {
+ *     --forgeax-node-border: #888;
+ *     --forgeax-battery-color-math: #ff00ff;
+ *   }
+ *
+ * Pair with `<NodeCanvas theme={legacyTheme} ... />` for full
+ * visual parity. The CSS file alone re-skins surfaces that read
+ * variables directly; the theme prop drives JS-computed inline
+ * styles. The two are complementary.
+ *
+ * Limitations: this file styles via class / attribute selectors.
+ * Selectors that target classes the components stamp today
+ * (e.g. .battery-node, .battery-node__header, .toggle-panel,
+ * .annotation-node, .number-slider-panel, .text-panel,
+ * .grid-panel, .probe-edge-path) light up immediately. Selectors
+ * for surfaces that currently render only inline styles
+ * (Inspector, BatteryPalette, CanvasSearchPopover, RelayNode,
+ * CanvasFrameNode) take effect once the Phase H2 component
+ * refactor stamps the matching className / data-testid hooks.
+ */
+
+/* -------------------------------------------------------------------------- */
+/* Tokens                                                                     */
+/* -------------------------------------------------------------------------- */
+
+:root {
+  /* Canvas chrome */
+  --forgeax-bg: #f7f7f8;
+  --forgeax-font: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Generic node card */
+  --forgeax-node-bg: #ffffff;
+  --forgeax-node-border: #d4d4d8;
+  --forgeax-node-border-selected: #3b82f6;
+  --forgeax-node-border-radius: 6px;
+  --forgeax-node-header-bg: #fafafa;
+  --forgeax-node-header-fg: #18181b;
+  --forgeax-node-body-fg: #374151;
+  --forgeax-node-shadow: 0 1px 2px rgba(0, 0, 0, 0.04),
+    0 2px 6px rgba(0, 0, 0, 0.06);
+  --forgeax-node-shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* RelayNode accent */
+  --forgeax-relay-color: #6366f1;
+  --forgeax-relay-handle-size: 8px;
+
+  /* AnnotationNode */
+  --forgeax-annotation-bg: #fef3c7;
+  --forgeax-annotation-fg: #451a03;
+
+  /* CanvasFrameNode */
+  --forgeax-frame-bg: #dbeafe;
+  --forgeax-frame-border: #1d4ed8;
+  --forgeax-frame-title-fg: #ffffff;
+
+  /* Port type colours */
+  --forgeax-port-size: 10px;
+  --forgeax-port-border: #374151;
+  --forgeax-port-bg: #94a3b8;
+  --forgeax-port-any: #94a3b8;
+  --forgeax-port-number: #2563eb;
+  --forgeax-port-string: #16a34a;
+  --forgeax-port-boolean: #9333ea;
+  --forgeax-port-object: #d97706;
+  --forgeax-port-grid: #0891b2;
+  --forgeax-port-geometry: #dc2626;
+
+  /* Edge palette by run-state */
+  --forgeax-edge-idle: #a1a1aa;
+  --forgeax-edge-running: #2563eb;
+  --forgeax-edge-completed: #16a34a;
+  --forgeax-edge-error: #dc2626;
+  --forgeax-edge-skipped: #ea580c;
+  --forgeax-edge-running-dash-ms: 800ms;
+  --forgeax-edge-width: 1.75px;
+
+  /* Per-battery-type accent map */
+  --forgeax-battery-color-math: #3b82f6;
+  --forgeax-battery-color-io: #16a34a;
+  --forgeax-battery-color-json: #d97706;
+  --forgeax-battery-color-ai: #a855f7;
+  --forgeax-battery-color-asset: #0891b2;
+  --forgeax-battery-color-group: #6366f1;
+  --forgeax-battery-color-special: #dc2626;
+  --forgeax-battery-color-default: #3b82f6;
+
+  /* Popover / inspector / palette surface */
+  --forgeax-surface-bg: #ffffff;
+  --forgeax-surface-border: #e4e4e7;
+  --forgeax-surface-fg: #18181b;
+  --forgeax-surface-muted-fg: #71717a;
+  --forgeax-surface-selected-bg: #3b82f6;
+  --forgeax-surface-selected-fg: #ffffff;
+  --forgeax-surface-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --forgeax-surface-radius: 6px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Canvas root                                                                */
+/* -------------------------------------------------------------------------- */
+
+/* Optional opt-out hook: consumers can wrap the canvas with
+ * .forgeax-canvas to scope these styles, or omit it to apply globally. */
+.forgeax-canvas,
+.react-flow.forgeax-canvas {
+  background: var(--forgeax-bg);
+  font-family: var(--forgeax-font);
+}
+
+/* -------------------------------------------------------------------------- */
+/* BatteryNode shell                                                          */
+/* -------------------------------------------------------------------------- */
+
+.battery-node {
+  background: var(--forgeax-node-bg);
+  border: 1px solid var(--forgeax-node-border);
+  border-radius: var(--forgeax-node-border-radius);
+  box-shadow: var(--forgeax-node-shadow);
+  color: var(--forgeax-node-body-fg);
+  font-family: var(--forgeax-font);
+  transition: box-shadow 120ms ease, border-color 120ms ease;
+}
+
+.battery-node:hover {
+  box-shadow: var(--forgeax-node-shadow-hover);
+}
+
+.battery-node.selected {
+  border-color: var(--forgeax-node-border-selected);
+  box-shadow: var(--forgeax-node-shadow-hover);
+}
+
+.battery-node__header {
+  background: var(--forgeax-node-header-bg);
+  color: var(--forgeax-node-header-fg);
+  border-top-left-radius: var(--forgeax-node-border-radius);
+  border-top-right-radius: var(--forgeax-node-border-radius);
+  border-bottom: 1px solid var(--forgeax-node-border);
+  font-weight: 500;
+}
+
+.battery-node__title {
+  color: var(--forgeax-node-header-fg);
+}
+
+.battery-node__status {
+  color: var(--forgeax-surface-muted-fg);
+}
+
+.battery-node__body {
+  color: var(--forgeax-node-body-fg);
+}
+
+/* Per-battery-type accent. Components stamp data-battery-kind="<key>"
+ * on the node root; CSS picks the matching colour. */
+.battery-node[data-battery-kind="math"] {
+  --forgeax-node-accent: var(--forgeax-battery-color-math);
+}
+.battery-node[data-battery-kind="io"] {
+  --forgeax-node-accent: var(--forgeax-battery-color-io);
+}
+.battery-node[data-battery-kind="json"] {
+  --forgeax-node-accent: var(--forgeax-battery-color-json);
+}
+.battery-node[data-battery-kind="ai"] {
+  --forgeax-node-accent: var(--forgeax-battery-color-ai);
+}
+.battery-node[data-battery-kind="asset"] {
+  --forgeax-node-accent: var(--forgeax-battery-color-asset);
+}
+.battery-node[data-battery-kind="group"] {
+  --forgeax-node-accent: var(--forgeax-battery-color-group);
+}
+.battery-node[data-battery-kind="special"] {
+  --forgeax-node-accent: var(--forgeax-battery-color-special);
+}
+
+.battery-node[data-battery-kind] .battery-node__header {
+  border-top: 2px solid
+    var(--forgeax-node-accent, var(--forgeax-battery-color-default));
+}
+
+/* Context menu used by BatteryNode. */
+.battery-context-menu {
+  background: var(--forgeax-surface-bg);
+  border: 1px solid var(--forgeax-surface-border);
+  border-radius: var(--forgeax-surface-radius);
+  box-shadow: var(--forgeax-surface-shadow);
+  color: var(--forgeax-surface-fg);
+  font-family: var(--forgeax-font);
+}
+
+/* -------------------------------------------------------------------------- */
+/* RelayNode                                                                  */
+/* -------------------------------------------------------------------------- */
+
+[data-testid="relay-node"] {
+  --relay-color: var(--forgeax-relay-color);
+  background: var(--relay-color);
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px var(--forgeax-node-bg);
+}
+
+[data-testid="relay-node"]:hover {
+  box-shadow: 0 0 0 2px var(--forgeax-node-bg),
+    0 0 0 4px var(--relay-color);
+}
+
+[data-testid="relay-handle-input"],
+[data-testid="relay-handle-output"] {
+  width: var(--forgeax-relay-handle-size);
+  height: var(--forgeax-relay-handle-size);
+}
+
+/* -------------------------------------------------------------------------- */
+/* ProbeEdge — animated dashes + per-state colour                             */
+/* -------------------------------------------------------------------------- */
+
+.probe-edge-path {
+  stroke-width: var(--forgeax-edge-width);
+  stroke: var(--forgeax-edge-idle);
+}
+
+.probe-edge-path[data-state="idle"] {
+  stroke: var(--forgeax-edge-idle);
+}
+.probe-edge-path[data-state="running"] {
+  stroke: var(--forgeax-edge-running);
+  stroke-dasharray: 6 4;
+  animation: forgeax-edge-dash var(--forgeax-edge-running-dash-ms) linear
+    infinite;
+}
+.probe-edge-path[data-state="completed"] {
+  stroke: var(--forgeax-edge-completed);
+}
+.probe-edge-path[data-state="error"] {
+  stroke: var(--forgeax-edge-error);
+}
+.probe-edge-path[data-state="skipped"] {
+  stroke: var(--forgeax-edge-skipped);
+  stroke-dasharray: 4 4;
+}
+
+@keyframes forgeax-edge-dash {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* AnnotationNode                                                             */
+/* -------------------------------------------------------------------------- */
+
+.annotation-node,
+[data-testid="annotation-node"] {
+  background: var(--forgeax-annotation-bg);
+  color: var(--forgeax-annotation-fg);
+  border: 1px solid var(--forgeax-node-border);
+  border-radius: var(--forgeax-node-border-radius);
+  box-shadow: var(--forgeax-node-shadow);
+  font-family: var(--forgeax-font);
+  padding: 8px;
+}
+
+.annotation-node__textarea,
+[data-testid="annotation-textarea"] {
+  background: transparent;
+  color: inherit;
+  border: 0;
+  outline: 0;
+  font-family: inherit;
+  resize: none;
+  width: 100%;
+}
+
+/* -------------------------------------------------------------------------- */
+/* CanvasFrameNode                                                            */
+/* -------------------------------------------------------------------------- */
+
+[data-testid="canvas-frame-node"] {
+  font-family: var(--forgeax-font);
+  color: var(--forgeax-frame-title-fg);
+}
+
+[data-testid="canvas-frame-title"] {
+  background: var(--forgeax-frame-border);
+  color: var(--forgeax-frame-title-fg);
+  font-weight: 500;
+  padding: 2px 8px;
+  border-top-left-radius: var(--forgeax-node-border-radius);
+  border-top-right-radius: var(--forgeax-node-border-radius);
+}
+
+[data-testid="canvas-frame-body"] {
+  background: var(--forgeax-frame-bg);
+  border: 1px solid var(--forgeax-frame-border);
+  border-radius: var(--forgeax-node-border-radius);
+  opacity: 0.85;
+}
+
+/* -------------------------------------------------------------------------- */
+/* CanvasSearchPopover                                                        */
+/* -------------------------------------------------------------------------- */
+
+[aria-label="canvas-search-popover"] {
+  background: var(--forgeax-surface-bg);
+  border: 1px solid var(--forgeax-surface-border);
+  border-radius: var(--forgeax-surface-radius);
+  box-shadow: var(--forgeax-surface-shadow);
+  color: var(--forgeax-surface-fg);
+  font-family: var(--forgeax-font);
+}
+
+[data-testid="canvas-search-count"] {
+  color: var(--forgeax-surface-muted-fg);
+}
+
+[data-testid="canvas-search-list"] {
+  background: var(--forgeax-surface-bg);
+}
+
+[data-testid^="canvas-search-item-"] {
+  color: var(--forgeax-surface-fg);
+}
+
+[data-testid^="canvas-search-item-"][aria-selected="true"],
+[data-testid^="canvas-search-item-"]:hover {
+  background: var(--forgeax-surface-selected-bg);
+  color: var(--forgeax-surface-selected-fg);
+}
+
+/* -------------------------------------------------------------------------- */
+/* BatteryPalette                                                             */
+/* -------------------------------------------------------------------------- */
+
+.forgeax-battery-palette,
+[data-testid="battery-palette"] {
+  background: var(--forgeax-surface-bg);
+  border: 1px solid var(--forgeax-surface-border);
+  border-radius: var(--forgeax-surface-radius);
+  color: var(--forgeax-surface-fg);
+  font-family: var(--forgeax-font);
+  box-shadow: var(--forgeax-node-shadow);
+}
+
+[data-testid^="battery-palette-item-"] {
+  color: var(--forgeax-surface-fg);
+  border-bottom: 1px solid var(--forgeax-surface-border);
+  padding: 6px 10px;
+}
+
+[data-testid^="battery-palette-item-"]:hover,
+[data-testid^="battery-palette-item-"][aria-selected="true"] {
+  background: var(--forgeax-surface-selected-bg);
+  color: var(--forgeax-surface-selected-fg);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Inspector                                                                  */
+/* -------------------------------------------------------------------------- */
+
+.forgeax-inspector,
+[data-testid="inspector"] {
+  background: var(--forgeax-surface-bg);
+  border: 1px solid var(--forgeax-surface-border);
+  border-radius: var(--forgeax-surface-radius);
+  color: var(--forgeax-surface-fg);
+  font-family: var(--forgeax-font);
+  padding: 8px 10px;
+}
+
+[data-testid^="inspector-param-"] {
+  color: var(--forgeax-surface-fg);
+}
+
+[data-testid^="inspector-param-"] label {
+  color: var(--forgeax-surface-muted-fg);
+}
+
+/* -------------------------------------------------------------------------- */
+/* NumberSliderPanel                                                          */
+/* -------------------------------------------------------------------------- */
+
+.number-slider-panel,
+[data-testid="number-slider-panel"] {
+  background: var(--forgeax-node-bg);
+  color: var(--forgeax-node-body-fg);
+  font-family: var(--forgeax-font);
+  border: 1px solid var(--forgeax-node-border);
+  border-radius: var(--forgeax-node-border-radius);
+  padding: 6px 8px;
+}
+
+[data-testid="number-slider-min"],
+[data-testid="number-slider-max"] {
+  color: var(--forgeax-surface-muted-fg);
+  font-size: 11px;
+}
+
+[data-testid="number-slider-input"] {
+  background: var(--forgeax-surface-bg);
+  color: var(--forgeax-surface-fg);
+  border: 1px solid var(--forgeax-surface-border);
+  border-radius: 4px;
+  font-family: inherit;
+}
+
+/* -------------------------------------------------------------------------- */
+/* TogglePanel                                                                */
+/* -------------------------------------------------------------------------- */
+
+.toggle-panel {
+  background: var(--forgeax-node-bg);
+  color: var(--forgeax-node-body-fg);
+  font-family: var(--forgeax-font);
+  border: 1px solid var(--forgeax-node-border);
+  border-radius: var(--forgeax-node-border-radius);
+  padding: 4px 8px;
+}
+
+.toggle-panel__label {
+  color: var(--forgeax-surface-muted-fg);
+}
+
+.toggle-panel__track {
+  background: var(--forgeax-surface-border);
+  border-radius: 999px;
+  transition: background 120ms ease;
+}
+
+.toggle-panel[data-on="true"] .toggle-panel__track {
+  background: var(--forgeax-surface-selected-bg);
+}
+
+.toggle-panel__thumb {
+  background: var(--forgeax-surface-bg);
+  border-radius: 50%;
+  box-shadow: var(--forgeax-node-shadow);
+  transition: transform 120ms ease;
+}
+
+/* -------------------------------------------------------------------------- */
+/* TextPanel / JsonPanel                                                      */
+/* -------------------------------------------------------------------------- */
+
+.text-panel,
+[data-testid="text-panel-textarea"],
+[data-testid="json-panel-textarea"],
+[data-testid="json-panel-read"] {
+  background: var(--forgeax-surface-bg);
+  color: var(--forgeax-surface-fg);
+  border: 1px solid var(--forgeax-surface-border);
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.text-panel__textarea {
+  background: transparent;
+  color: inherit;
+  border: 0;
+  outline: 0;
+  font-family: inherit;
+  resize: none;
+  width: 100%;
+}
+
+[data-testid="json-panel-error"] {
+  color: var(--forgeax-edge-error);
+}
+
+/* -------------------------------------------------------------------------- */
+/* GridPanel                                                                  */
+/* -------------------------------------------------------------------------- */
+
+.grid-panel {
+  background: var(--forgeax-node-bg);
+  border: 1px solid var(--forgeax-node-border);
+  border-radius: var(--forgeax-node-border-radius);
+  color: var(--forgeax-node-body-fg);
+  font-family: var(--forgeax-font);
+}
+
+.grid-panel--placeholder {
+  color: var(--forgeax-surface-muted-fg);
+  font-style: italic;
+}
+
+.grid-panel__cell {
+  border: 1px solid var(--forgeax-surface-border);
+  background: var(--forgeax-surface-bg);
+  color: var(--forgeax-surface-fg);
+}

@@ -1,0 +1,738 @@
+/* 💡 顶部工具栏样式：标题栏布局与 Settings 下拉操作入口 */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--titlebar-height);
+  padding: 0 12px;
+  /* 渐变底色：顶部最暗，向下轻微过渡，营造深邃通透感 */
+  background: linear-gradient(180deg, var(--color-bg-titlebar) 0%, var(--color-bg-titlebar-gradient) 100%);
+  /* 底部边界：极细亮线 + 阴影，让标题栏与画布明确分层 */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+  user-select: none;
+  position: relative;
+  z-index: 10;
+}
+
+.toolbar-left,
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-left {
+  min-width: 200px;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.toolbar-right {
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: default;
+  user-select: none;
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  background: linear-gradient(135deg, #f5ffd1 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.01em;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast),
+              color var(--transition-fast),
+              transform var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.toolbar-btn:hover {
+  background-color: var(--color-accent-hover);
+  color: var(--color-text-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.toolbar-btn:active {
+  background-color: var(--color-accent-active);
+  transform: translateY(0) scale(0.95);
+  box-shadow: none;
+}
+
+/* active 类（如全屏按钮处于聚焦态时）：与 Settings 等其它带状态按钮一致的高亮视效 */
+.toolbar-btn.active {
+  background-color: rgba(var(--color-accent-rgb), 0.18);
+  color: var(--color-accent);
+}
+
+.toolbar-btn-run {
+  position: relative;
+}
+
+.toolbar-btn-run:hover {
+  color: var(--color-success);
+  background-color: rgba(76, 175, 80, 0.12);
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.toolbar-btn-stop:hover {
+  color: var(--color-error);
+  background-color: rgba(244, 67, 54, 0.12);
+  box-shadow: 0 0 10px rgba(244, 67, 54, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 组合按钮间的分隔竖线样式 */
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  margin: 0 8px;
+  background-color: var(--color-border);
+}
+
+/* ── Develop / Templates 切换胶囊（原 BatteryBar 顶部组件，迁入 Toolbar） ──── */
+.toolbar-filter-toggle {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: 6px;
+  gap: 0;
+}
+
+.toolbar-filter-toggle-btn {
+  padding: 4px 12px;
+  font-size: 11px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background var(--transition-fast),
+              color var(--transition-fast),
+              border-color var(--transition-fast);
+}
+
+.toolbar-filter-toggle-btn:first-child {
+  border-radius: 4px 0 0 4px;
+  border-right-width: 0;
+}
+
+.toolbar-filter-toggle-btn:last-child {
+  border-radius: 0 4px 4px 0;
+}
+
+.toolbar-filter-toggle-btn:hover {
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.toolbar-filter-toggle-btn.is-active {
+  color: var(--color-accent);
+  background: rgba(var(--color-accent-rgb, 158 222 65), 0.14);
+  border-color: rgba(var(--color-accent-rgb, 158 222 65), 0.5);
+}
+
+.toolbar-filter-toggle-btn.is-active + .toolbar-filter-toggle-btn {
+  border-left-color: rgba(var(--color-accent-rgb, 158 222 65), 0.5);
+}
+
+/* Templates 模式：金色品牌高亮（与 BatteryBar 模板模式品牌色一致） */
+.toolbar-filter-toggle.mode-templates .toolbar-filter-toggle-btn.is-active {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.14);
+  border-color: rgba(251, 191, 36, 0.5);
+}
+
+.toolbar-filter-toggle.mode-templates .toolbar-filter-toggle-btn.is-active + .toolbar-filter-toggle-btn {
+  border-left-color: rgba(251, 191, 36, 0.5);
+}
+
+/* 统一下拉框基础样式（含自定义箭头，深浅主题通用） */
+
+.pipeline-status-badge {
+  min-width: 60px;
+}
+
+.status-indicator {
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.status-indicator.status-running {
+  background-color: rgba(76, 175, 80, 0.2);
+  color: var(--color-success);
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+.status-indicator.status-completed {
+  background-color: rgba(76, 175, 80, 0.2);
+  color: var(--color-success);
+}
+
+.status-indicator.status-error {
+  background-color: rgba(244, 67, 54, 0.2);
+  color: var(--color-error);
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+
+/* 数据探针按钮：active 时绿色高亮 + 持续脉动，视觉上表示"正在监测" */
+.toolbar-btn-probe.active {
+  background-color: rgba(52, 211, 153, 0.18);
+  color: #34d399;
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.3);
+  animation: probeActive 2.2s ease-in-out infinite;
+}
+
+.toolbar-btn-probe:hover {
+  color: #34d399;
+  background-color: rgba(52, 211, 153, 0.12);
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.25), 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes probeActive {
+  0%, 100% { box-shadow: 0 0 8px rgba(52, 211, 153, 0.3); }
+  50%       { box-shadow: 0 0 14px rgba(52, 211, 153, 0.6); }
+}
+
+.open-file-empty {
+  padding: 12px 16px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+/* 每条文件条目 */
+.open-file-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 7px 12px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-align: left;
+  transition: background-color var(--transition-fast);
+}
+
+.open-file-item:hover {
+  background: var(--color-accent-hover);
+}
+
+.open-file-item-name {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+/* 右侧元信息行：成品标签 + 时间戳，横向排列 */
+.open-file-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+/* 来源标签：高亮小徽章，区分来源目录（默认蓝色=管线） */
+.open-file-item-badge {
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--color-accent, #4a90e2);
+  border-radius: 3px;
+  padding: 0px 4px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+}
+
+/* 场景标签：红色徽章，区分 finals 目录来源 */
+.open-file-item-badge-scene {
+  background: #e53935;
+}
+
+.open-file-item-ts {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-family: 'Fira Code', monospace;
+}
+
+/* ===== 另存为对话框 ===== */
+
+/* 全屏遮罩：半透明黑色背景，点击可关闭 */
+.save-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: overlayFadeIn 0.15s ease;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* 对话框主体：宽度随内容收紧，避免右侧空一大块 */
+.save-dialog {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: fit-content;
+  min-width: min(260px, 100%);
+  max-width: calc(100vw - 32px);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.04) inset;
+  animation: dialogSlideIn 0.15s ease;
+  overflow: hidden;
+}
+
+@keyframes dialogSlideIn {
+  from { transform: translateY(-10px) scale(0.97); opacity: 0; }
+  to   { transform: translateY(0)     scale(1);    opacity: 1; }
+}
+
+/* 对话框标题行 */
+.save-dialog-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 12px 8px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border);
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.save-dialog-title svg {
+  color: var(--color-accent);
+}
+
+/* 对话框内容区：与弹窗同宽，由最宽一行（多为第二行 checkbox）决定整体宽度 */
+.save-dialog-body {
+  padding: 12px 12px 10px;
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.save-dialog-label {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin-bottom: 8px;
+}
+
+.save-dialog-input {
+  display: block;
+  width: 100%;
+  min-width: 12em;
+  padding: 8px 10px;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.save-dialog-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-accent);
+}
+
+.save-dialog-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 选项行容器：横向排列多个 checkbox */
+.save-dialog-checkboxes {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+/* 第二行（保存目标）：与上一行分隔 + 三项挤一行 */
+.save-dialog-checkboxes-follow {
+  margin-top: 8px;
+  flex-wrap: nowrap;
+  gap: 6px;
+  justify-content: flex-start;
+}
+
+.save-dialog-checkboxes-follow .save-dialog-checkbox-row {
+  flex: 0 1 auto;
+  min-width: 0;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.save-dialog-checkboxes-follow .save-dialog-checkbox-row span {
+  white-space: nowrap;
+}
+
+@media (max-width: 420px) {
+  .save-dialog-checkboxes-follow {
+    flex-wrap: wrap;
+    gap: 6px 10px;
+  }
+}
+
+/* 保留时间戳 / 替换旧版 / 保存目标：同一套行内控件样式 */
+.save-dialog-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.save-dialog-checkbox-row input[type="checkbox"] {
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+/* 保存成功状态 */
+.save-dialog-success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-success);
+  font-size: var(--font-size-sm);
+  padding: 4px 0;
+}
+
+.save-dialog-success-icon {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* 底部按钮行 */
+.save-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 10px 12px 12px;
+  border-top: 1px solid var(--color-border);
+  flex: 0 0 auto;
+}
+
+.save-dialog-btn {
+  padding: 6px 16px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  border: none;
+  transition: background-color var(--transition-fast), color var(--transition-fast),
+              transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.save-dialog-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.save-dialog-btn-cancel {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+.save-dialog-btn-cancel:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+  color: var(--color-text-primary);
+}
+
+.save-dialog-btn-confirm {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast, #10170e);
+  font-weight: 600;
+}
+
+.save-dialog-btn-confirm:hover:not(:disabled) {
+  background: #bcef2e;
+  box-shadow: 0 0 10px rgba(var(--color-accent-rgb), 0.34);
+  transform: translateY(-1px);
+}
+
+.save-dialog-btn-confirm:active:not(:disabled) {
+  transform: translateY(0) scale(0.97);
+}
+
+/* ── Editor Settings 下拉菜单（参考 renderer Toolbar.css 设置下拉） ────────── */
+
+.settings-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* 下拉面板：锚在按钮右下角向右对齐 */
+.settings-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  width: min(420px, calc(100vw - 24px));
+  max-height: min(680px, calc(100vh - 64px));
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  z-index: 200;
+  padding: 4px 0 8px;
+  overflow-y: auto;
+  animation: dialogSlideIn 0.12s ease;
+}
+
+.settings-dropdown-header {
+  padding: 5px 12px 4px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 6px;
+}
+
+.settings-dropdown-header--section {
+  margin-top: 10px;
+}
+
+.settings-panel {
+  padding: 0 12px;
+}
+
+/* 可折叠条目（历史记录 / 数据类型）：作为小条目嵌入 Settings 菜单 */
+.settings-collapsible-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  margin-top: 6px;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--color-border);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-align: left;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.settings-collapsible-header:hover {
+  color: var(--color-text-primary);
+  background: var(--color-accent-hover, rgba(255, 255, 255, 0.04));
+}
+
+.settings-collapsible-chevron {
+  flex-shrink: 0;
+  transition: transform var(--transition-fast);
+}
+
+.settings-collapsible-header.is-expanded .settings-collapsible-chevron {
+  transform: rotate(90deg);
+}
+
+.settings-collapsible-header.is-expanded {
+  color: var(--color-text-primary);
+}
+
+.settings-panel--history {
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.settings-panel--datatypes {
+  max-height: 220px;
+  overflow: auto;
+}
+
+.settings-dropdown::-webkit-scrollbar,
+.settings-panel::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.settings-dropdown::-webkit-scrollbar-thumb,
+.settings-panel::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 999px;
+}
+
+.settings-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 12px;
+}
+
+.settings-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  padding: 3px 0;
+  border-radius: var(--radius-sm);
+  user-select: none;
+}
+
+.settings-checkbox-row:hover {
+  color: var(--color-accent);
+}
+
+.settings-checkbox-row input[type="checkbox"] {
+  width: 12px;
+  height: 12px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.settings-checkbox-row svg {
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.settings-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 2px 12px 8px;
+}
+
+.settings-action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  transition: background var(--transition-fast),
+              border-color var(--transition-fast),
+              color var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.settings-action-button:hover:not(:disabled),
+.settings-action-button.active {
+  border-color: rgba(var(--color-accent-rgb), 0.45);
+  background: rgba(var(--color-accent-rgb), 0.12);
+  color: var(--color-accent);
+  transform: translateY(-1px);
+}
+
+.settings-action-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.settings-open-file-panel {
+  margin: 0 12px 8px;
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.12);
+  padding: 4px;
+}
+
+/* ── 设置菜单中的「项目」入口：替代原顶栏 ProjectsButton ─────────────── */
+.settings-actions--projects {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.settings-action-button--project {
+  justify-content: flex-start;
+  padding: 8px 10px;
+  background: rgba(var(--color-accent-rgb, 200, 255, 80), 0.08);
+  border-color: rgba(var(--color-accent-rgb, 200, 255, 80), 0.25);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.settings-action-button--project:hover:not(:disabled) {
+  background: rgba(var(--color-accent-rgb, 200, 255, 80), 0.18);
+  border-color: rgba(var(--color-accent-rgb, 200, 255, 80), 0.5);
+  color: var(--color-text-primary);
+}
+
+.settings-project-emoji {
+  font-size: 15px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.settings-project-name {
+  flex: 1 1 auto;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.settings-project-icon {
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}

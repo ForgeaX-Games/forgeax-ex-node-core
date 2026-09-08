@@ -1,0 +1,7 @@
+{
+  "id": "fixture.collect",
+  "name": "collect",
+  "inputs": [{ "name": "in", "type": "number", "access": "item" }],
+  "outputs": [{ "name": "out", "type": "number", "access": "item" }],
+  "params": []
+}

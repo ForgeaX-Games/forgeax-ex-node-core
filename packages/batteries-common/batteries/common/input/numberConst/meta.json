@@ -1,0 +1,33 @@
+{
+  "id": "number_const",
+  "label": "数值",
+  "name-en": "Number",
+  "description": "通过滑条或输入框输出一个数值常量",
+  "description-en": "Output a numeric constant via slider or input.",
+  "icon": "一个带滑块的数字滑条或旋钮特写，扁平 UI 插画风格，适合做电池图标，小尺寸可辨、背景简洁、主色一至两种。",
+  "version": "1.0.0",
+  "tags": [
+    "input",
+    "value",
+    "number"
+  ],
+  "tag_labels": [
+    "输入",
+    "值",
+    "数值"
+  ],
+  "frontend": {
+    "nodeType": "number_const"
+  },
+  "inputs": [],
+  "outputs": [
+    {
+      "name": "value",
+      "type": "number",
+      "access": "item",
+      "label": "值",
+      "description": "用户设置的数值",
+      "description-en": "The user-set numeric value."
+    }
+  ]
+}

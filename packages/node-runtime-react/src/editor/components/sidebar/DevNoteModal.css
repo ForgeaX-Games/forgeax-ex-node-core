@@ -1,0 +1,208 @@
+/* ── 开发记录弹窗 ─────────────────────────────────────────────────────────────── */
+
+.dev-note-modal {
+  position: fixed;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md, 6px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  /* 高度由内容自动撑开，最大高度由 JS style 传入 maxHeight */
+  height: auto;
+  animation: devNoteSlideIn 0.15s ease;
+}
+
+@keyframes devNoteSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ── 标题栏（拖拽手柄） ─────────────────────────────────────────────────────── */
+.dev-note-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px 8px 12px;
+  background: var(--color-bg-tertiary);
+  border-bottom: 1px solid var(--color-border);
+  cursor: grab;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.dev-note-modal-header:active {
+  cursor: grabbing;
+}
+
+.dev-note-modal-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 32px);
+}
+
+/* ── 关闭按钮 ────────────────────────────────────────────────────────────────── */
+.dev-note-modal-close {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm, 4px);
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.dev-note-modal-close:hover {
+  background: rgba(255, 80, 80, 0.18);
+  color: #ff5050;
+}
+
+/* ── 滚动内容区 ──────────────────────────────────────────────────────────────── */
+.dev-note-modal-body {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dev-note-modal-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.dev-note-modal-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.dev-note-modal-body::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
+}
+
+/* ── 条目基础样式 ────────────────────────────────────────────────────────────── */
+.dev-note-entry {
+  border-radius: var(--radius-sm, 4px);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ── 历史条目（只读） ────────────────────────────────────────────────────────── */
+.dev-note-entry--readonly {
+  background: var(--color-bg-primary, rgba(0, 0, 0, 0.2));
+  border: 1px solid var(--color-border);
+  opacity: 0.65;
+  pointer-events: none;
+  user-select: text;
+}
+
+.dev-note-entry--readonly .dev-note-entry-title {
+  font-size: 10px;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--color-text-secondary);
+  padding: 5px 8px 4px;
+  border-bottom: 1px solid var(--color-border);
+  letter-spacing: 0.2px;
+}
+
+.dev-note-entry--readonly .dev-note-entry-content {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  padding: 6px 8px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 20px;
+}
+
+/* ── 当前条目（可编辑，高亮） ────────────────────────────────────────────────── */
+.dev-note-entry--active {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-accent, #7b6ff5);
+  box-shadow: 0 0 0 1px rgba(var(--color-accent-rgb), 0.15);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 标题行：只读时间戳 + 可追加输入框并排 */
+.dev-note-entry-title-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 8px;
+  gap: 4px;
+}
+
+/* 只读时间戳（灰色斜体，不可点击编辑） */
+.dev-note-entry-ts {
+  font-size: 10px;
+  font-style: italic;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+  user-select: none;
+  line-height: 28px;
+}
+
+/* 追加标题输入框：占剩余宽度，无边框无背景 */
+.dev-note-entry-suffix-input {
+  flex: 1;
+  min-width: 0;
+  padding: 5px 0;
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  font-size: 10px;
+  font-weight: 500;
+  font-family: inherit;
+  outline: none;
+}
+
+.dev-note-entry-suffix-input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.35;
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* 内容输入区：初始单行，随内容自动撑高，由 JS 控制高度 */
+.dev-note-entry-content-input {
+  width: 100%;
+  padding: 6px 8px;
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  font-size: 12px;
+  font-family: inherit;
+  line-height: 1.6;
+  outline: none;
+  resize: none;
+  box-sizing: border-box;
+  overflow-y: hidden;
+  /* 初始高度由 rows=1 + line-height 决定 */
+}
+
+.dev-note-entry-content-input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.4;
+}

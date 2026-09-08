@@ -1,0 +1,7 @@
+{
+  "kernel": {
+    "execute.started": "管线 {pipelineId} 已开始",
+    "execute.completed": "管线 {pipelineId} 已完成，耗时 {duration} 毫秒",
+    "execute.aborted": "管线 {pipelineId} 已中止"
+  }
+}

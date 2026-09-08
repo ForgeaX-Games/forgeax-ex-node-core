@@ -1,0 +1,13 @@
+{
+  "name": "@forgeax/batteries-common",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared common batteries for ForgeaX workbench plugins",
+  "files": [
+    "batteries"
+  ],
+  "dependencies": {
+    "@forgeax/node-runtime": "workspace:*"
+  }
+}

@@ -1,0 +1,106 @@
+/* 💡 底部状态栏样式：控制状态信息布局、连接状态指示器动画及版本显示 */
+/* DOC-05-02 6.1 状态栏尺寸 24px */
+.statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--statusbar-height);
+  padding: 0 var(--spacing-md);
+  background-color: var(--color-bg-titlebar);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  user-select: none;
+}
+
+/* 把状态栏的三段区域拆分成三个 flex-item 分列左右与居中对齐 */
+.statusbar-left,
+.statusbar-center,
+.statusbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.statusbar-left {
+  flex: 1; /* 左侧占满剩余空间 */
+}
+
+.statusbar-center {
+  justify-content: center; /* 内部居中排列选中节点信息 */
+}
+
+.statusbar-right {
+  flex: 1; /* 右侧占满并靠右对齐 */
+  justify-content: flex-end;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* 连接指示器：圆形状态灯的基础外观 */
+.connection-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.connection-indicator.connected {
+  background-color: var(--color-success);
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
+}
+
+.connection-indicator.connecting {
+  background-color: var(--color-warning);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.connection-indicator.disconnected {
+  background-color: var(--color-error);
+  box-shadow: 0 0 5px rgba(244, 67, 54, 0.5);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px rgba(255, 193, 7, 0.5); }
+  50%       { opacity: 0.5; box-shadow: 0 0 8px rgba(255, 193, 7, 0.8); }
+}
+
+/* 进度执行徽章状态样式 */
+.status-badge {
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+.status-badge.status-running {
+  background-color: rgba(76, 175, 80, 0.2);
+  color: var(--color-success);
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+
+.status-badge.status-completed {
+  background-color: rgba(76, 175, 80, 0.2);
+  color: var(--color-success);
+}
+
+.status-badge.status-error {
+  background-color: rgba(244, 67, 54, 0.2);
+  color: var(--color-error);
+}
+
+.selected-info {
+  color: var(--color-text-primary);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

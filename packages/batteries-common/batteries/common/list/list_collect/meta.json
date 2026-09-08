@@ -1,0 +1,85 @@
+{
+  "id": "list_collect",
+  "label": "收集",
+  "name-en": "Collect",
+  "description": "跨循环轮次收集结果，输出一级外层 result list。",
+  "description-en": "Collect loop results across iterations and output a result list.",
+  "icon": "一个漏斗形状从上方接收多个元素逐一落入，底部输出一个完整列表，右侧有进度数字，扁平插画风格，主色青绿与深蓝，背景透明简洁",
+  "version": "1.1.0",
+  "tags": [
+    "list",
+    "loop",
+    "collect"
+  ],
+  "tag_labels": [
+    "列表",
+    "循环",
+    "收集"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "inputs": [
+    {
+      "name": "item",
+      "type": "any",
+      "access": "item",
+      "label": "元素",
+      "description": "本轮结果",
+      "description-en": "Current iteration result."
+    },
+    {
+      "name": "index",
+      "type": "number",
+      "access": "item",
+      "label": "下标",
+      "default": 0,
+      "description": "当前下标",
+      "description-en": "Current index."
+    },
+    {
+      "name": "total",
+      "type": "number",
+      "access": "item",
+      "label": "总数",
+      "default": 0,
+      "description": "list 总元素数量",
+      "description-en": "Total item count."
+    },
+    {
+      "name": "collectorId",
+      "type": "string",
+      "access": "item",
+      "label": "收集ID",
+      "default": "default",
+      "description": "收集器唯一标识",
+      "description-en": "Collector identifier."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "resultList",
+      "type": "any",
+      "access": "list",
+      "label": "结果",
+      "description": "完成时输出一级结果 list，未完成时为 null",
+      "description-en": "Rank-1 result list when complete; null otherwise."
+    },
+    {
+      "name": "collectedCount",
+      "type": "number",
+      "access": "item",
+      "label": "已收集",
+      "description": "已收集数量",
+      "description-en": "Collected count."
+    },
+    {
+      "name": "isDone",
+      "type": "boolean",
+      "access": "item",
+      "label": "完成",
+      "description": "是否收集完成",
+      "description-en": "Whether collection is complete."
+    }
+  ]
+}

@@ -1,0 +1,307 @@
+/* NumberSlider 节点样式 — 仿 Number Slider 横向紧凑风格 */
+
+/* ===== 节点外框 ===== */
+.ns-node {
+  --node-color: var(--color-accent);
+  --node-rgb: var(--color-accent-rgb);
+  display: flex;
+  align-items: stretch;
+  width: 180px; /* 固定宽度，防止切换 track/input 时节点宽度跳变；与 ToggleNode/BatteryNode 保持一致 */
+  background: rgba(var(--node-rgb), 0.15);
+  border: 1px solid var(--node-color);
+  border-radius: 4px;
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.72),
+              0 0 0 1px rgba(var(--node-rgb), 0.22),
+              0 0 16px rgba(var(--node-rgb), 0.26),
+              0 0 30px rgba(var(--node-rgb), 0.1);
+  outline: 2px solid transparent;
+  outline-offset: 0;
+  position: relative;
+  overflow: visible; /* 允许 Handle 和右键菜单溢出 */
+  opacity: 0.88;
+  transition: background 0.12s, border-color 0.12s, outline-color 0.12s, box-shadow 0.12s, opacity 0.12s;
+  cursor: default;
+}
+
+.ns-node:hover {
+  background: rgba(var(--node-rgb), 0.18);
+  border-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.82),
+              0 0 0 1px rgba(var(--node-rgb), 0.3),
+              0 0 18px rgba(var(--node-rgb), 0.34),
+              0 0 34px rgba(var(--node-rgb), 0.14);
+}
+
+.ns-node.selected {
+  background: rgba(var(--node-rgb), 0.24);
+  border-color: var(--node-color);
+  outline-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 2px rgba(var(--node-rgb), 0.98),
+              0 0 0 2px rgba(var(--node-rgb), 0.42),
+              0 0 20px rgba(var(--node-rgb), 0.58),
+              0 0 42px rgba(var(--node-rgb), 0.24);
+}
+
+/* ===== 左侧：名称格子 ===== */
+.ns-name-cell {
+  flex-shrink: 0;
+  width: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  background: rgba(var(--node-rgb), 0.12);
+  border-right: 1px solid rgba(var(--node-rgb), 0.22);
+  border-radius: 4px 0 0 4px;
+  user-select: none;
+  cursor: grab;
+}
+
+.ns-node:active .ns-name-cell {
+  cursor: grabbing;
+}
+
+.ns-name {
+  font-size: 0.63rem;
+  font-weight: 700;
+  color: rgba(var(--node-rgb), 0.92);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* ===== 右侧：滑条区域 ===== */
+.ns-slider-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 3px 8px 2px 8px;
+  gap: 1px;
+  min-width: 0;
+}
+
+/* ===== 滑条轨道 ===== */
+.ns-track {
+  position: relative;
+  height: 18px;
+  box-sizing: border-box; /* 与 ns-edit-input 保持一致，避免切换时节点大小跳变 */
+  background: rgba(var(--node-rgb), 0.10);
+  border: 1px solid rgba(var(--node-rgb), 0.26);
+  border-radius: 3px;
+  cursor: ew-resize;
+  user-select: none;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.ns-track:hover {
+  border-color: rgba(var(--node-rgb), 0.58);
+}
+
+/* 已填充区域 */
+.ns-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, rgba(var(--node-rgb), 0.34) 0%, rgba(var(--node-rgb), 0.68) 100%);
+  pointer-events: none;
+  border-radius: 2px 0 0 2px;
+  transition: width 0.04s linear;
+}
+
+/* 节点编辑器风格拖动刻痕（小竖线） */
+.ns-grip {
+  position: absolute;
+  top: 15%;
+  bottom: 15%;
+  width: 3px;
+  background: rgba(var(--node-rgb), 0.85);
+  transform: translateX(-50%);
+  border-radius: 1.5px;
+  pointer-events: none;
+  box-shadow: 0 0 4px rgba(var(--node-rgb), 0.5);
+}
+
+/* 当前值文字（浮在轨道中央） */
+.ns-val {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: #e8e4ff;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  text-shadow: 0 0 6px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 1);
+  user-select: none;
+}
+
+/* ===== 内联编辑输入框（双击后替换轨道） ===== */
+.ns-edit-input {
+  width: 100%;
+  min-width: 0; /* 防止 input intrinsic min-width 撑开父容器 */
+  height: 18px;
+  box-sizing: border-box;
+  background: rgba(var(--node-rgb), 0.15);
+  border: 1px solid var(--node-color);
+  border-radius: 3px;
+  color: #e8e4ff;
+  font-size: 0.72rem;
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  padding: 0 6px;
+  outline: none;
+  text-align: center;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.ns-edit-input:focus {
+  box-shadow: 0 0 0 2px rgba(var(--node-rgb), 0.35);
+}
+
+/* ===== 范围标注 (min ... max) ===== */
+.ns-bounds {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+
+.ns-bound {
+  font-size: 0.62rem;
+  color: #7878b8;
+  font-family: 'Courier New', monospace;
+  user-select: none;
+}
+
+/* ===== 右键菜单 ===== */
+.ns-ctx-menu {
+  position: fixed;
+  z-index: 10000;
+  background: #1a1836;
+  border: 1px solid #4a4290;
+  border-radius: 6px;
+  padding: 10px 12px;
+  min-width: 190px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(var(--node-rgb), 0.15);
+}
+
+.ns-ctx-title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #8888cc;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #2e2c5a;
+}
+
+.ns-ctx-favorite {
+  width: 100%;
+  min-height: 24px;
+  margin: 0 0 8px;
+  padding: 4px 8px;
+  border: 1px solid rgba(250, 204, 21, 0.35);
+  border-radius: 4px;
+  background: rgba(250, 204, 21, 0.08);
+  color: #fde68a;
+  font-size: 0.66rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.ns-ctx-favorite:hover {
+  background: rgba(250, 204, 21, 0.16);
+  border-color: rgba(250, 204, 21, 0.55);
+}
+
+.ns-ctx-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.ns-ctx-label {
+  font-size: 0.63rem;
+  color: #8080b8;
+  width: 40px;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.ns-ctx-input {
+  flex: 1;
+  height: 22px;
+  background: #22204a;
+  border: 1px solid #3a3878;
+  border-radius: 3px;
+  color: #d0ccff;
+  font-size: 0.68rem;
+  font-family: 'Courier New', monospace;
+  padding: 0 6px;
+  outline: none;
+  min-width: 0;
+}
+
+.ns-ctx-input:focus {
+  border-color: var(--node-color);
+  box-shadow: 0 0 0 2px rgba(var(--node-rgb), 0.25);
+}
+
+/* Chrome number input 隐藏箭头 */
+.ns-ctx-input::-webkit-inner-spin-button,
+.ns-ctx-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+
+.ns-ctx-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.ns-ctx-btn {
+  flex: 1;
+  height: 24px;
+  border-radius: 3px;
+  font-size: 0.63rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #3a3878;
+  background: #22204a;
+  color: #9090c8;
+  letter-spacing: 0.03em;
+  transition: background 0.1s, color 0.1s;
+}
+
+.ns-ctx-btn:hover {
+  background: #2e2c60;
+  color: #c0c0f0;
+}
+
+.ns-ctx-btn--apply {
+  background: #3d3880;
+  border-color: #5a52a0;
+  color: #d0ccff;
+}
+
+.ns-ctx-btn--apply:hover {
+  background: #5248a0;
+  color: #ffffff;
+}

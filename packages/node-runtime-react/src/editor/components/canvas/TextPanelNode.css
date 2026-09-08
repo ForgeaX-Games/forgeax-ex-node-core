@@ -1,0 +1,202 @@
+/* 💡 TextPanel 节点样式：仿 Panel 的深色绿调外观，支持自由缩放 */
+
+/* ===== 节点容器 =====
+   width/height: 100% 使组件铺满 ReactFlow 节点包装层，
+   NodeResizer 会通过修改包装层的 style.width/height 来驱动尺寸变化 */
+.text-panel-node {
+  --node-color: #7cc47c;
+  --node-rgb: 124, 196, 124;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(var(--node-rgb), 0.15);
+  border: 1px solid var(--node-color);
+  border-radius: 5px;
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.72),
+              0 0 0 1px rgba(var(--node-rgb), 0.22),
+              0 0 16px rgba(var(--node-rgb), 0.26),
+              0 0 30px rgba(var(--node-rgb), 0.1);
+  outline: 2px solid transparent;
+  outline-offset: 0;
+  overflow: hidden;
+  opacity: 0.88;
+  transition: background var(--transition-fast), border-color var(--transition-fast), outline-color var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
+}
+
+.text-panel-node:hover {
+  background: rgba(var(--node-rgb), 0.18);
+  border-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.82),
+              0 0 0 1px rgba(var(--node-rgb), 0.3),
+              0 0 18px rgba(var(--node-rgb), 0.34),
+              0 0 34px rgba(var(--node-rgb), 0.14);
+}
+
+.text-panel-node.selected {
+  background: rgba(var(--node-rgb), 0.24);
+  border-color: var(--node-color);
+  outline-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 2px rgba(var(--node-rgb), 0.98),
+              0 0 0 2px rgba(var(--node-rgb), 0.42),
+              0 0 20px rgba(var(--node-rgb), 0.58),
+              0 0 42px rgba(var(--node-rgb), 0.24);
+}
+
+.text-panel-node.editing {
+  border-color: var(--node-color);
+}
+
+/* ===== 标题栏 ===== */
+.text-panel-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 6px 3px 10px;
+  background: rgba(var(--node-rgb), 0.12);
+  border-bottom: 1px solid rgba(var(--node-rgb), 0.22);
+  cursor: grab;
+  user-select: none;
+  min-height: 22px;
+}
+
+.text-panel-node:active .text-panel-header {
+  cursor: grabbing;
+}
+
+.text-panel-title {
+  flex: 1;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(var(--node-rgb), 0.94);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== 保存为预设按钮 ===== */
+.text-panel-save-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  color: rgba(var(--node-rgb), 0.94);
+  opacity: 0.35;
+  cursor: pointer;
+  transition: opacity 0.15s, color 0.15s, background 0.15s;
+}
+
+.text-panel-save-btn:hover {
+  opacity: 0.9;
+  background: rgba(var(--node-rgb), 0.15);
+}
+
+/* 保存成功：短暂绿色高亮 */
+.text-panel-save-btn--saved {
+  opacity: 1 !important;
+  color: #72da72 !important;
+  background: rgba(114, 218, 114, 0.2) !important;
+}
+
+/* 文本为空：红色 + 抖动 */
+.text-panel-save-btn--empty {
+  opacity: 1 !important;
+  color: #f87171 !important;
+  animation: text-panel-btn-shake 0.45s ease;
+}
+
+@keyframes text-panel-btn-shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-3px); }
+  60%       { transform: translateX(3px); }
+  80%       { transform: translateX(-2px); }
+}
+
+/* ===== 主体区 ===== */
+.text-panel-body {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 0; /* 防止 flexbox 撑开超出 */
+}
+
+/* 只读展示区 */
+.text-panel-content {
+  width: 100%;
+  height: 100%;
+  padding: 6px 10px;
+  color: #b8deb8;
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  overflow: auto;
+  cursor: default;
+  box-sizing: border-box;
+}
+
+/* 逐行渲染：每行独立 display:block，折叠时不产生假空行 */
+.text-panel-line {
+  display: block;
+  word-break: break-all;
+}
+
+/* has-input 时不允许双击进入编辑，鼠标为默认指针，带提示 */
+.text-panel-node.has-input .text-panel-content {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+.text-panel-placeholder {
+  color: #4a7a4a;
+  font-style: italic;
+}
+
+/* 可编辑 textarea */
+.text-panel-textarea {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 6px 10px;
+  background: rgba(50, 90, 50, 0.18);
+  border: none;
+  outline: none;
+  color: #d0ecd0;
+  caret-color: #88e888;
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 0.72rem;
+  line-height: 1.55;
+  resize: none;
+  box-sizing: border-box;
+  cursor: text;
+}
+
+/* ===== NodeResizer 定制：边线与手柄 ===== */
+
+/* 四边虚线框 */
+.text-panel-resize-line {
+  border-color: var(--node-color) !important;
+  border-style: dashed !important;
+  border-width: 1px !important;
+}
+
+/* 8 方向手柄：小方块 */
+.text-panel-resize-handle {
+  width: 7px !important;
+  height: 7px !important;
+  background: var(--node-color) !important;
+  border: 1px solid rgba(var(--node-rgb), 0.22) !important;
+  border-radius: 2px !important;
+}
+

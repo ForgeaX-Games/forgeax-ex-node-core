@@ -1,0 +1,50 @@
+{
+  "id": "compare_gt",
+  "label": "大于",
+  "name-en": "Greater",
+  "description": "比较两个数值 A 和 B，A > B 时输出 true，否则输出 false。支持 Shape/Rank 自动批处理",
+  "description-en": "Compare two numbers A and B. Outputs true if A > B. Supports Shape/Rank auto-iteration.",
+  "icon": "大于号 > 符号居中，左右各一个数字，扁平几何风格，简洁小图标，主色橙灰两色",
+  "version": "1.1.0",
+  "lacing": "longest",
+  "tags": [
+    "number",
+    "compare",
+    "logic"
+  ],
+  "tag_labels": [
+    "数值",
+    "比较",
+    "逻辑"
+  ],
+  "inputs": [
+    {
+      "name": "a",
+      "type": "number",
+      "access": "item",
+      "label": "A",
+      "default": 0,
+      "description": "左操作数",
+      "description-en": "Left operand."
+    },
+    {
+      "name": "b",
+      "type": "number",
+      "access": "item",
+      "label": "B",
+      "default": 0,
+      "description": "右操作数",
+      "description-en": "Right operand."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "bool",
+      "access": "item",
+      "label": "结果",
+      "description": "A > B 时为 true，否则为 false",
+      "description-en": "true if A > B, false otherwise."
+    }
+  ]
+}

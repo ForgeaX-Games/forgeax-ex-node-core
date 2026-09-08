@@ -1,0 +1,135 @@
+/* 💡 GridPanel 节点样式：暗紫调，canvas 1:1 像素渲染，不随节点拉伸 */
+
+/*
+ * gp-node 铺满 ReactFlow wrapper（width/height:100%），
+ * JS 负责把 wrapper 的 style.width/height 设为内容尺寸+padding（仅首次数据到来时），
+ * 后续用户可自由拖动 NodeResizer 改变节点大小，overflow:hidden 裁剪溢出的 canvas。
+ */
+.gp-node {
+  --node-color: #8888cc;
+  --node-rgb: 136, 136, 204;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(var(--node-rgb), 0.15);
+  border: 1px solid var(--node-color);
+  border-radius: 5px;
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.72),
+              0 0 0 1px rgba(var(--node-rgb), 0.22),
+              0 0 16px rgba(var(--node-rgb), 0.26),
+              0 0 30px rgba(var(--node-rgb), 0.1);
+  outline: 2px solid transparent;
+  outline-offset: 0;
+  overflow: hidden;    /* 用户缩小节点时裁剪 canvas，不溢出 */
+  opacity: 0.92;
+  transition: background var(--transition-fast), border-color var(--transition-fast), outline-color var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
+}
+
+.gp-node:hover {
+  background: rgba(var(--node-rgb), 0.18);
+  border-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 1px rgba(var(--node-rgb), 0.82),
+              0 0 0 1px rgba(var(--node-rgb), 0.3),
+              0 0 18px rgba(var(--node-rgb), 0.34),
+              0 0 34px rgba(var(--node-rgb), 0.14);
+}
+
+.gp-node.selected {
+  background: rgba(var(--node-rgb), 0.24);
+  border-color: var(--node-color);
+  outline-color: var(--node-color);
+  box-shadow: var(--shadow-lg),
+              inset 0 0 0 2px rgba(var(--node-rgb), 0.98),
+              0 0 0 2px rgba(var(--node-rgb), 0.42),
+              0 0 20px rgba(var(--node-rgb), 0.58),
+              0 0 42px rgba(var(--node-rgb), 0.24);
+}
+
+/* ===== 标题栏 ===== */
+.gp-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 3px 6px 3px 10px;
+  background: rgba(var(--node-rgb), 0.12);
+  border-bottom: 1px solid rgba(var(--node-rgb), 0.22);
+  cursor: grab;
+  user-select: none;
+  min-height: 22px;
+  min-width: 0;
+}
+
+.gp-node:active .gp-header {
+  cursor: grabbing;
+}
+
+.gp-title {
+  flex: 1;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: rgba(var(--node-rgb), 0.92);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== 主体区 ===== */
+.gp-body {
+  flex: 1;
+  padding: 6px 8px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: auto;     /* 内容超出时显示滚动条，与文本面板一致 */
+  min-height: 0;      /* 防止 flex 子元素撑破父容器 */
+}
+
+/* 单个网格包装 */
+.gp-grid-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;     /* 不压缩 canvas */
+}
+
+.gp-grid-label {
+  font-size: 0.6rem;
+  color: #5555aa;
+  font-family: 'Courier New', monospace;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* canvas 由 JS 设置 style.width/height = 像素尺寸，CSS 不覆盖 */
+.gp-canvas {
+  display: block;
+  flex-shrink: 0;
+  image-rendering: pixelated;  /* 防止浏览器插值模糊 */
+}
+
+.gp-placeholder {
+  font-size: 0.72rem;
+  color: #3a3a6a;
+  font-style: italic;
+  font-family: 'Courier New', monospace;
+}
+
+/* ===== NodeResizer ===== */
+.gp-resize-line {
+  border-color: var(--node-color) !important;
+  border-style: dashed !important;
+  border-width: 1px !important;
+}
+
+.gp-resize-handle {
+  width: 7px !important;
+  height: 7px !important;
+  background: var(--node-color) !important;
+  border: 1px solid rgba(var(--node-rgb), 0.22) !important;
+  border-radius: 2px !important;
+}

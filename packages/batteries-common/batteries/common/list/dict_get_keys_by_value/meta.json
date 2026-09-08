@@ -1,0 +1,82 @@
+{
+  "id": "dict_get_keys_by_value",
+  "label": "字典查",
+  "name-en": "DictFind",
+  "description": "按 value list 或动态 value 从字典中反向查找 key list。",
+  "description-en": "Reverse-lookup dictionary keys by a value list or dynamic values.",
+  "icon": "一个粉色字典图标，左侧伸出多条箭头由值标签指向钥匙符号，体现反向查找，扁平插画风格，背景简洁白色，主色为粉和绿",
+  "version": "1.1.0",
+  "tags": [
+    "list",
+    "dict",
+    "value",
+    "find"
+  ],
+  "tag_labels": [
+    "列表",
+    "字典",
+    "值",
+    "查找"
+  ],
+  "projectTypes": [
+    "both"
+  ],
+  "inputs": [
+    {
+      "name": "dict",
+      "type": "dict",
+      "access": "item",
+      "label": "字典",
+      "description": "源字典",
+      "description-en": "Source dictionary."
+    },
+    {
+      "name": "valueList",
+      "type": "any",
+      "access": "list",
+      "label": "值列",
+      "description": "一维 value list",
+      "description-en": "Rank-1 value list."
+    },
+    {
+      "name": "val_0",
+      "type": "any",
+      "access": "tree",
+      "label": "Value 0",
+      "description": "第 0 个 value",
+      "description-en": "0th value."
+    },
+    {
+      "name": "val_1",
+      "type": "any",
+      "access": "tree",
+      "label": "Value 1",
+      "description": "第 1 个 value；连接后自动追加",
+      "description-en": "1st value; connecting it appends a new slot."
+    }
+  ],
+  "outputs": [
+    {
+      "name": "keysList",
+      "type": "string",
+      "access": "list",
+      "label": "Key组",
+      "description": "每个 value 对应一组匹配 key",
+      "description-en": "One key list per input value."
+    }
+  ],
+  "dynamicInputs": {
+    "prefix": "val_",
+    "labelTemplate": "Value $i",
+    "minCount": 2,
+    "type": "any",
+    "access": "tree"
+  },
+  "dynamicOutputs": {
+    "prefix": "keys_",
+    "labelTemplate": "Keys [$i]",
+    "minCount": 1,
+    "type": "string",
+    "access": "list"
+  }
+}

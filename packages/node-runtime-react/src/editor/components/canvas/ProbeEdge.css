@@ -1,0 +1,203 @@
+/* 💡 数据探针标签样式：连线中点的类型 + 值 pill，支持点击展开完整数据面板 */
+
+.probe-label {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  background: var(--probe-bg, rgba(10, 8, 22, 0.88));
+  border: 1px solid var(--probe-border, rgba(255, 255, 255, 0.1));
+  border-radius: 10px;
+  padding: 2px 7px 2px 3px;
+  font-size: 10px;
+  line-height: 1.5;
+  white-space: nowrap;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+  user-select: none;
+  /* 未展开时固定宽度，保持视觉统一 */
+  width: 70px;
+  /* 始终浮于节点之上，不被电池遮住 */
+  z-index: 9999;
+  /* 标签出现时淡入，避免视觉突兀 */
+  animation: probeLabelIn 0.18s ease-out;
+}
+
+/* 展开状态：固定宽度变大，边框高亮、圆角变大，浮于所有节点之上 */
+.probe-label--expanded {
+  width: 150px;
+  border-color: var(--probe-border-expanded, rgba(255, 255, 255, 0.22));
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  white-space: normal;
+  z-index: 9999;
+}
+
+/* 浅色主题 */
+[data-theme="light"] .probe-label {
+  --probe-bg: rgba(240, 238, 255, 0.94);
+  --probe-border: rgba(var(--color-accent-rgb), 0.22);
+  --probe-border-expanded: rgba(var(--color-accent-rgb), 0.5);
+  box-shadow: 0 1px 6px rgba(80, 70, 180, 0.18);
+}
+
+/* 收起行：类型徽章 + 摘要值横向排列，撑满父容器宽度 */
+.probe-pill-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+}
+
+/* 类型徽章：继承端口颜色体系，与节点端口视觉统一 */
+.probe-type-badge {
+  display: inline-block;
+  padding: 1px 5px;
+  border-radius: 7px;
+  border: 1px solid;
+  font-weight: 700;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  flex-shrink: 0;
+}
+
+/* 值文本：等宽字体，保证数字/JSON 对齐 */
+.probe-value-text {
+  font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+  font-size: 10px;
+  color: var(--color-text-primary);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 无值状态：斜体降调 */
+.probe-no-value {
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+/* ── 展开面板 ─────────────────────────────────────────────────── */
+
+.probe-expanded-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%;
+  animation: probeExpandIn 0.15s ease-out;
+}
+
+[data-theme="light"] .probe-expanded-panel {
+  border-top-color: rgba(var(--color-accent-rgb), 0.15);
+}
+
+/* 面板顶部：类型名 + 端口名 */
+.probe-expanded-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.probe-expanded-type {
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+
+.probe-expanded-port {
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 9px;
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+
+/* 摘要行：与 tooltip 的 value label 对齐 */
+.probe-expanded-summary {
+  font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+  font-size: 10px;
+  color: var(--color-text-primary);
+  word-break: break-all;
+}
+
+/* extra 预览：array/dict 的一行预览 */
+.probe-expanded-extra {
+  font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+  font-size: 9px;
+  color: var(--color-text-secondary);
+  word-break: break-all;
+  opacity: 0.8;
+}
+
+.probe-expanded-tree-info {
+  font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+  font-size: 9px;
+  color: rgba(180, 200, 255, 0.78);
+  word-break: break-all;
+  opacity: 0.9;
+}
+
+/* 完整 JSON 代码块 */
+.probe-expanded-json {
+  font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+  font-size: 9px;
+  color: var(--color-text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: 5px 7px;
+  margin: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  word-break: break-all;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  /* 自定义滚动条 */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.probe-expanded-json::-webkit-scrollbar {
+  width: 4px;
+}
+
+.probe-expanded-json::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 2px;
+}
+
+[data-theme="light"] .probe-expanded-json {
+  background: rgba(var(--color-accent-rgb), 0.05);
+  border-color: rgba(var(--color-accent-rgb), 0.1);
+}
+
+@keyframes probeLabelIn {
+  from {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes probeExpandIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

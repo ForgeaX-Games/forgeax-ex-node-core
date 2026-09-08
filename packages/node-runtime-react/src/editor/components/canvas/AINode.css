@@ -1,0 +1,200 @@
+/* AI 电池节点样式
+ * 根类使用 .battery-node（与所有其他类型电池统一）；
+ * 本文件的局部控件保留 AI 红色相，但亮度/状态等级与其他节点一致。
+ * 本文件只定义 AI 专有结构：①AI/IMG 徽章 ②运行按钮区 ③常驻预览区
+ */
+
+.ai-node {
+  --ai-color: #dc2626;
+  --ai-rgb: 220, 38, 38;
+}
+
+/* ① AI/IMG 徽章 */
+.ai-badge {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--ai-color);
+  background: rgba(var(--ai-rgb), 0.14);
+  border: 1px solid rgba(var(--ai-rgb), 0.34);
+  border-radius: var(--radius-sm);
+  padding: 1px 5px;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+/* ① options 端口行内小图标选择器 */
+.ai-port-options-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  margin-left: 4px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+  color: var(--color-text-muted, rgba(255, 255, 255, 0.35));
+  cursor: pointer;
+  transition: background 0.15s ease,
+              color 0.15s ease,
+              border-color 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+.ai-port-options-btn:hover {
+  background: rgba(var(--ai-rgb), 0.15);
+  color: var(--ai-color);
+  border-color: rgba(var(--ai-rgb), 0.35);
+  box-shadow: 0 0 5px rgba(var(--ai-rgb), 0.25);
+}
+
+.ai-port-options-btn:active {
+  background: rgba(var(--ai-rgb), 0.22);
+  transition-duration: 0.08s;
+}
+
+.ai-port-options-btn--open {
+  background: rgba(var(--ai-rgb), 0.18);
+  color: var(--ai-color);
+  border-color: rgba(var(--ai-rgb), 0.45);
+  box-shadow: 0 0 6px rgba(var(--ai-rgb), 0.3);
+}
+
+/* 小三角 svg 开关时旋转 */
+.ai-port-options-btn svg {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ai-port-options-btn--open svg {
+  transform: rotate(180deg);
+}
+
+/* ② 运行按钮区 */
+.ai-node__body {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-top: 1px solid rgba(var(--ai-rgb), 0.2);
+}
+
+.ai-run-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 10px;
+  background-color: var(--ai-color);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.ai-run-btn:hover {
+  filter: brightness(1.12);
+  box-shadow: 0 2px 8px rgba(var(--ai-rgb), 0.5);
+}
+
+.ai-run-btn:active {
+  filter: brightness(0.88);
+}
+
+.ai-run-btn--running {
+  background-color: rgba(var(--ai-rgb), 0.68);
+  animation: ai-run-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes ai-run-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+.ai-run-spinner {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: ai-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes ai-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ③ 常驻预览区 */
+.ai-node__preview {
+  border-top: 1px solid rgba(var(--ai-rgb), 0.18);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  overflow: hidden;
+  height: 150px;
+}
+
+.ai-node__preview-body {
+  padding: var(--spacing-sm) var(--spacing-md);
+  overflow-y: auto;
+  height: 100%;
+  background-color: var(--color-bg-primary);
+  box-sizing: border-box;
+}
+
+.ai-node__preview-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ai-node__preview-body::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
+}
+
+.ai-node__empty {
+  color: var(--color-text-muted, rgba(255, 255, 255, 0.2));
+  font-size: var(--font-size-xs);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  user-select: none;
+}
+
+.ai-node__error {
+  color: var(--color-error);
+  font-size: var(--font-size-xs);
+  line-height: 1.45;
+  background: rgba(240, 78, 82, 0.08);
+  border: 1px solid rgba(240, 78, 82, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 5px 8px;
+}
+
+.ai-node__text-result {
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xs);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ai-node__image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.ai-node__preview-img {
+  width: 100%;
+  max-width: 220px;
+  border-radius: var(--radius-sm);
+  object-fit: contain;
+  border: 1px solid var(--color-border);
+}

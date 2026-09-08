@@ -1,0 +1,151 @@
+/* 💡 CustomSelect 自定义下拉框：完全自定义渲染，支持深/浅主题 CSS 变量 */
+
+/* ── 容器 ─────────────────────────────────────────────── */
+.custom-select {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+}
+
+/* ── 触发按钮（闭合状态） ──────────────────────────────── */
+.custom-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  width: 100%;
+  padding: 4px 8px;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-xs);
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+  text-align: left;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.custom-select-trigger:hover,
+.custom-select-trigger:focus-visible {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(var(--color-accent-rgb), 0.15);
+}
+
+.custom-select-value {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+/* 旋转 chevron 指示开关状态 */
+.custom-select-chevron {
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+  transition: transform var(--transition-fast);
+}
+
+.custom-select-chevron--open {
+  transform: rotate(180deg);
+}
+
+/* ── 下拉面板（fixed 定位，逃出 overflow:hidden 容器） ── */
+.custom-select-dropdown {
+  position: fixed;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  z-index: 9999;
+  overflow: hidden;
+  animation: customSelectSlide 0.1s ease;
+}
+
+@keyframes customSelectSlide {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 选项条目 ──────────────────────────────────────────── */
+.custom-select-option {
+  padding: 7px 12px;
+  font-size: var(--font-size-xs);
+  font-family: inherit;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast);
+  user-select: none;
+}
+
+.custom-select-option:hover {
+  background: var(--color-accent-hover);
+}
+
+.custom-select-option--active {
+  color: var(--color-accent);
+  background: rgba(var(--color-accent-rgb), 0.1);
+}
+
+/* ── 禁用态 ────────────────────────────────────────────── */
+.custom-select--disabled .custom-select-trigger {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── 场景变体：NumberSlider 精度菜单（compact） ────────── */
+.ns-select {
+  flex: 1;
+}
+
+.ns-select .custom-select-trigger {
+  height: 22px;
+  padding: 0 6px;
+  font-size: 0.68rem;
+}
+
+.ns-select .custom-select-option {
+  padding: 5px 10px;
+  font-size: 0.68rem;
+}
+
+
+/* ── 场景变体：AINode 模型选择（红色主题，紧凑） ─────────── */
+.ai-select {
+  width: auto;
+}
+
+.ai-select .custom-select-trigger {
+  background: rgba(220, 38, 38, 0.08);
+  border-color: rgba(220, 38, 38, 0.3);
+  color: rgba(220, 38, 38, 0.9);
+  font-size: 8px;
+  padding: 2px 5px;
+  max-width: 88px;
+}
+
+.ai-select .custom-select-trigger:hover,
+.ai-select .custom-select-trigger:focus-visible {
+  border-color: #dc2626;
+  background: rgba(220, 38, 38, 0.14);
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.15);
+}
+
+.ai-select .custom-select-chevron {
+  color: rgba(220, 38, 38, 0.7);
+}
+
+.ai-select .custom-select-option--active {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.ai-select .custom-select-option:hover {
+  background: rgba(220, 38, 38, 0.08);
+}
